@@ -1,3 +1,9 @@
-h1 {
+body {
+  text-align: center;
   background-color: white;
+  font-family: sans-serif;
+}
+
+p, li {
+  text-align: justify;
 }
