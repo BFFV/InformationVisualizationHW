@@ -1,9 +1,31 @@
 body {
-  text-align: center;
-  background-color: white;
+  text-align: justify;
   font-family: sans-serif;
+  color: rgb(243, 243, 243);
+  background-color: rgb(41, 41, 41);
 }
 
-p, li {
-  text-align: justify;
+h1 {
+  color: rgb(74, 221, 241);
+}
+
+h2 {
+  color: rgb(252, 255, 79);
+}
+
+h3 {
+  color: rgb(253, 176, 176);
+}
+
+.task h3 {
+  display: inline;
+}
+
+.highlight {
+  color: orange;
+}
+
+#content {
+  margin: 0 auto;
+  width: 80%;
 }

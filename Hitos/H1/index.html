@@ -5,214 +5,231 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Hito 1 - IIC2026</h1>
+    <div id="content">
+      <h1>Hito 1 - IIC2026</h1>
       <h2>Abstracción de Tareas</h2>
-        <h3>Tarea 1: DESCUBRIR la CORRELACIÓN entre la zona geográfica y los factores socioeconómicos de los distintos condados con muertes</h3>
-          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
-             la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos). Dado que esta corresponde a información nueva que se quiere conocer, la acción a realizar es DESCUBRIR.
-          </p>
-          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income', 'nat_bucket',
-             'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica).
-          </p>
-          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
-             representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de zonas geográficas más amplias, desde los tractos hasta los estados).
-          </p>
-        <h3>Tarea 2: COMPARAR la SIMILARIDAD entre el número de personas difuntas de alguna minoría vs personas blancas, así como también entre los sexos biológicos</h3>
-          <p>La historiadora quiere observar las diferencias entre el número de personas difuntas según su raza, permitiéndole ver si existe una diferencia sustancial entre
-             las minorías y las personas de raza blanca (también desea realizar el mismo procedimiento para los sexos biológicos). Entonces, se quiere realizar una COMPARACIÓN
-              entre las variables de raza/sexo según su cantidad de muertes. El objetivo de esta tarea es ver si los valores de la cantidad de muertes son significativamente
-               más grandes para algunas razas/sexo que para otras, por lo que se puede utilizar la SIMILARIDAD entre estos valores para determinar si poseen diferencias muy drásticas.
-          </p>
-          <p>Los datos necesarios para esta tarea son 'gender' (sexo biológico del difunto) y 'raceethnicity' (raza del difunto). A partir de ellos, se pueden derivar nuevos datos:
-             'n_killings_by_gender' (número de muertes totales para cada sexo biológico) y 'n_killings_by_race' (número de muertes totales para cada raza).
-          </p>
-        <h3>Tarea 3: DESCUBRIR la DISTRIBUCIÓN de incidentes según las fechas del año</h3>
-          <p>La historiadora plantea una hipótesis sobre la concentración de incidentes según las fechas del año, la que tiene que ser corroborada. Entonces, se quiere DESCUBRIR esta información,
-            para lo que será necesario visualizar la cantidad de muertes según fecha en el año. Adicionalmente, se quiere saber la frecuencia de los incidentes y si hay aglomeraciones en ciertas fechas.
-             Todo esto puede ser analizado al observar la DISTRIBUCIÓN de la cantidad de muertes según fecha en el año, donde las aglomeraciones pueden ser identificadas de forma directa al observar la
-              forma de la visualización.
-          </p>
-          <p>El único dato necesario para esta tarea (del dataset original) es el atributo 'date', que indica la fecha del incidente. Luego, se puede derivar el atributo 'n_killings_by_date', que indica
-             el número de incidentes para cada fecha del año.
-          </p>
+      <div class="task">
+        <h3>Tarea 1: </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">CORRELACIÓN</h3>
+        <h3> entre la zona geográfica y los factores socioeconómicos de los distintos condados con muertes</h3>
+        <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
+          la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
+           Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+        </p>
+        <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
+           'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
+            y sobre las divisiones geopolíticas de interés).
+        </p>
+        <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
+            representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+        </p>
+      </div>
+      <div class="task">
+        <h3>Tarea 2: </h3><h3 class="highlight">COMPARAR</h3><h3> la </h3><h3 class="highlight">SIMILARIDAD</h3>
+        <h3> entre el número de personas difuntas de alguna minoría vs personas blancas, así como también entre los sexos biológicos</h3>
+        <p>La historiadora quiere observar las diferencias entre el número de personas difuntas según su raza, permitiéndole ver si existe una diferencia sustancial entre
+            las minorías y las personas de raza blanca (también desea realizar el mismo procedimiento para los sexos biológicos). Entonces, se quiere realizar una COMPARACIÓN
+            entre las variables de raza/sexo según su cantidad de muertes. El objetivo de esta tarea es ver si los valores de la cantidad de muertes son significativamente
+              más grandes para algunas razas/sexo que para otras, por lo que se puede utilizar la SIMILARIDAD entre estos valores para determinar si poseen diferencias muy drásticas.
+        </p>
+        <p>Los datos necesarios para esta tarea son 'gender' (sexo biológico del difunto) y 'raceethnicity' (raza del difunto). A partir de ellos, se pueden derivar nuevos datos:
+            'n_killings_by_gender' (número de muertes totales para cada sexo biológico) y 'n_killings_by_race' (número de muertes totales para cada raza).
+        </p>
+      </div>
+      <div class="task">
+        <h3>Tarea 3: </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">DISTRIBUCIÓN</h3><h3> de incidentes según las fechas del año</h3>
+        <p>La historiadora plantea una hipótesis sobre la concentración de incidentes según las fechas del año, la que tiene que ser corroborada. Entonces, se quiere DESCUBRIR esta información,
+          para lo que será necesario visualizar la cantidad de muertes según fecha en el año. Adicionalmente, se quiere saber la frecuencia de los incidentes y si hay aglomeraciones en ciertas fechas.
+            Todo esto puede ser analizado al observar la DISTRIBUCIÓN de la cantidad de muertes según fecha en el año, donde las aglomeraciones pueden ser identificadas de forma directa al observar la
+            forma de la visualización.
+        </p>
+        <p>El único dato necesario para esta tarea (del dataset original) es el atributo 'date', que indica la fecha del incidente. Luego, se puede derivar el atributo 'n_killings_by_date', que indica
+            el número de incidentes para cada fecha del año.
+        </p>
+      </div>
       <h2>Abstracción de Datos</h2>
         <h3>name</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Categórico, ya que los nombres no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
           </ul>
-        <h3>name</h3>
+        <h3>age</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la edad toma valores numéricos enteros que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia de edad exacta entre distintas personas.</li>
+            <li>Secuencial, ya que la edad toma siempre valores positivos.</li>
+            <li>No Cíclico, ya que la edad puede aumentar indefinidamente.</li>
           </ul>
-        <h3>name</h3>
+        <h3>gender</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Categórico, ya que es binario y no existe un orden entre los valores.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
           </ul>
-        <h3>name</h3>
+        <h3>raceethnicity</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Categórico, ya que los nombres de razas no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
           </ul>
-        <h3>name</h3>
+        <h3>date</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que las fechas se pueden ordenar en el tiempo (en este caso se pueden ordenar independiente del año).</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia de tiempo exacta entre 2 fechas, medida en días (sin considerar el año).</li>
+            <li>Secuencial, ya que la fecha está siempre acotada por los días y meses del año.</li>
+            <li>Cíclico, ya que al no considerar el año, la fecha NO aumenta indefinidamente (al llegar al último día del año y avanzar, se vuelve a los primeros de forma cíclica).</li>
           </ul>
-        <h3>name</h3>
+        <h3>city</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Categórico, ya que los nombres de ciudades no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
           </ul>
-        <h3>name</h3>
+        <h3>state</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Categórico, ya que los identificadores de los estados corresponden a siglas sin un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
           </ul>
-        <h3>name</h3>
+        <h3>latitude</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la latitud toma valores númericos reales que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta de latitud entre 2 puntos geográficos.</li>
+            <li>Divergente, ya que la latitud se mide tanto en una dirección positiva como una negativa a partir del punto de referencia.</li>
+            <li>Cíclico, ya que al dar la vuelta a la Tierra la latitud eventualmente vuelve a su valor inicial en la línea del Ecuador.</li>
           </ul>
-        <h3>name</h3>
+        <h3>longitude</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la longitud toma valores númericos reales que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta de longitud entre 2 puntos geográficos.</li>
+            <li>Divergente, ya que la longitud se mide tanto en una dirección positiva como una negativa a partir del punto de referencia.</li>
+            <li>Cíclico, ya que al dar la vuelta a la Tierra la longitud eventualmente vuelve a su valor inicial en el meridiano de referencia.</li>
           </ul>
-        <h3>name</h3>
+        <h3>county_fp</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que el identificador toma valores númericos enteros que poseen un orden.</li>
+            <li>Ordinal, ya que el identificador sirve solamente para distinguir a cada condado, sin definir comparaciones entre sus valores.</li>
+            <li>Secuencial, ya que el identificador toma siempre valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que el número identificador aumenta indefinidamente según la cantidad de condados a representar.</li>
           </ul>
-        <h3>name</h3>
+        <h3>cause</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Categórico, ya que las causas de muerte corresponden a categorías, las que no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
           </ul>
-        <h3>name</h3>
+        <h3>armed</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Categórico, ya que los tipos de arma son categorías, las que no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
           </ul>
-        <h3>name</h3>
+        <h3>share_white</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que el porcentaje toma valores numéricos reales que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre porcentajes.</li>
+            <li>Secuencial, ya que el porcentaje toma siempre valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que al llegar al máximo de 100 (o mínimo de 0) el valor no puede crecer/decrecer más.</li>
           </ul>
-        <h3>name</h3>
+        <h3>share_black</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que el porcentaje toma valores numéricos reales que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre porcentajes.</li>
+            <li>Secuencial, ya que el porcentaje toma siempre valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que al llegar al máximo de 100 (o mínimo de 0) el valor no puede crecer/decrecer más.</li>
           </ul>
-        <h3>name</h3>
+        <h3>share_hispanic</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que el porcentaje toma valores numéricos reales que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre porcentajes.</li>
+            <li>Secuencial, ya que el porcentaje toma siempre valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que al llegar al máximo de 100 (o mínimo de 0) el valor no puede crecer/decrecer más.</li>
           </ul>
-        <h3>name</h3>
+        <h3>p_income</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que el ingreso toma valores numéricos que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre ingresos monetarios.</li>
+            <li>Secuencial, ya que el ingreso personal siempre toma valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que el ingreso puede aumentar de forma indefinida.</li>
           </ul>
-        <h3>name</h3>
+        <h3>county_income</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que el ingreso toma valores numéricos que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre ingresos monetarios.</li>
+            <li>Secuencial, ya que el ingreso por hogar siempre toma valores mayores a 0.</li>
+            <li>No Cíclico, ya que el ingreso puede aumentar de forma indefinida.</li>
           </ul>
-        <h3>name</h3>
+        <h3>nat_bucket</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que los distintos quintiles se representan con números enteros que poseen un orden intrínseco.</li>
+            <li>Ordinal, ya que no se puede conocer la diferencia exacta de ingresos entre 2 hogares distintos (sólo indican la posición relativa a todos los hogares del país).</li>
+            <li>Secuencial, ya que los quintiles siempre toman valores mayores a 0.</li>
+            <li>No Cíclico, ya que existen límites inferior y superior absolutos para los quintiles.</li>
           </ul>
-        <h3>name</h3>
+        <h3>pov</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que el porcentaje toma valores numéricos reales que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre porcentajes.</li>
+            <li>Secuencial, ya que el porcentaje toma siempre valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que al llegar al máximo de 100 (o mínimo de 0) el valor no puede crecer/decrecer más.</li>
           </ul>
-        <h3>name</h3>
+        <h3>urate</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la razón toma valores numéricos reales que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre razones de desempleo.</li>
+            <li>Secuencial, ya que la razón toma siempre valores entre 0 y 1.</li>
+            <li>No Cíclico, ya que al llegar al máximo de 1 (o mínimo de 0) el valor no puede crecer/decrecer más.</li>
           </ul>
-        <h3>name</h3>
+        <h3>college</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la razón toma valores numéricos reales que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre razones de desempleo.</li>
+            <li>Secuencial, ya que la razón toma siempre valores entre 0 y 1.</li>
+            <li>No Cíclico, ya que al llegar al máximo de 1 (o mínimo de 0) el valor no puede crecer/decrecer más.</li>
           </ul>
-        <h3>name</h3>
+        <h3>n_killings</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la cantidad de muertes toma valores numéricos enteros que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre la cantidad de muertes de 2 zonas geográficas distintas.</li>
+            <li>Secuencial, ya que la cantidad de muertes toma siempre valores positivos.</li>
+            <li>No Cíclico, ya que la cantidad de muertes puede aumentar indefinidamente.</li>
           </ul>
-        <h3>name</h3>
+        <h3>n_killings_by_gender</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la cantidad de muertes por sexo biológico toma valores numéricos enteros que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre la cantidad de muertes de los 2 sexos biológicos.</li>
+            <li>Secuencial, ya que la cantidad de muertes por sexo biológico toma siempre valores positivos.</li>
+            <li>No Cíclico, ya que la cantidad de muertes por sexo biológico puede aumentar indefinidamente.</li>
           </ul>
-        <h3>name</h3>
+        <h3>n_killings_by_race</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la cantidad de muertes por raza toma valores numéricos enteros que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre la cantidad de muertes de 2 razas distintas.</li>
+            <li>Secuencial, ya que la cantidad de muertes por raza toma siempre valores positivos.</li>
+            <li>No Cíclico, ya que la cantidad de muertes por raza puede aumentar indefinidamente.</li>
           </ul>
-        <h3>name</h3>
+        <h3>n_killings_by_date</h3>
           <ul>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
-            <li>A</li>
+            <li>Ordenado, ya que la cantidad de muertes por fecha toma valores numéricos enteros que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre la cantidad de muertes de 2 fechas distintas.</li>
+            <li>Secuencial, ya que la cantidad de muertes por fecha toma siempre valores positivos.</li>
+            <li>No Cíclico, ya que la cantidad de muertes por fecha puede aumentar indefinidamente.</li>
           </ul>
       <h2>Dataset</h2>
-        <p>a
-        </p>
+        <ul>
+          <li>El dataset es de tipo tabla, ya que está organizado en filas (los datos de las muertes) y columnas (los atributos).</li>
+          <li>El dataset es estático, ya que se considera siempre la información del año 2015, sin actualizarlo durante su uso. Los datos derivados tampoco se guardan en el dataset.</li>
+          <li>Hay 3 tipos de datos singulares presentes: atributos (las columnas del dataset), ítems (los registros de las muertes) y posición (latitud y longitud).</li>
+          <li>El único atributo de llave posible es 'name', ya que para un mismo difunto solo existe 1 registro de muerte. Esto permite diferenciar de forma absoluta a cada registro de muerte,
+             según el nombre del difunto.</li>
+        </ul>
+    </div>
   </body>
 </html>
