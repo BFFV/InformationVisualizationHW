@@ -25,3 +25,7 @@ h1 {
 .sub-title > p {
   margin-top: 0;
 }
+
+.text-italic {
+  font-style: italic;
+}
