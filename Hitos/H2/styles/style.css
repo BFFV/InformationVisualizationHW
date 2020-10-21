@@ -4,28 +4,46 @@
 }
 
 html {
-  background-color: snow;
+  background-color: white;
 }
 
 svg {
   border: 2px solid #69359c;
-  background-color: white;
 }
 
-h1 {
-  margin-bottom: 4px;
+.big-title {
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+.title {
+  font-weight: bold;
+  font-size: x-large;
 }
 
 .sub-title {
   font-weight: bold;
-  font-style: italic;
-  margin-top: 0;
+  font-size: large;
 }
 
-.sub-title > p {
-  margin-top: 0;
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
 }
 
-.text-italic {
-  font-style: italic;
+.navbar {
+  background-color: wheat;
+  width: 20%;
+}
+
+.card-container {
+  display: flex;
+  flex-flow: row wrap;
+  width: 80%;
+}
+
+.card {
+  background-color: white;
+  width: 300px;
+  height: 400px;
 }

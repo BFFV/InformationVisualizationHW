@@ -1,57 +1,18 @@
-const width = 800;
-const height = 600;
-const margin = {
-  top: 30,
-  bottom: 30,
-  right: 30,
-  left: 30,
-};
+const cardContainer = d3.select('.card-container')
 
-const svg = d3
-  .select('#players')
-  .append('svg')
-  .attr('width', width)
-  .attr('height', height);
-
-// const boton = d3.select('body').append('button').text('Agregar elemento');
-
-// const parrafo = d3.select('body').append('p');
-
-const cardContainer = svg
-  .append('g')
-  .append('rect')
-  .attr('width', 300)
-  .attr('height', 400)
-  .attr('fill', 'none')
-  .attr('stroke', 'black')
-  .attr('transform', `translate(${margin.left + 200} ${margin.top + 50})`)
-
-
-const chartContainer = svg
-  .append('g')
-  .attr('transform', `translate(${margin.left + 350} ${margin.top + 300})`)
-
-
-const chartExterior = chartContainer
-  .append('path')
-  .attr('d', drawHexagon([100, 100, 100, 100, 100, 100, 100]))
-  .attr('fill', 'none')
-  .attr('stroke', 'black')
-
-
-function drawHexagon(radiusInfo) {
+function drawHexagon(radiusInfo, maxRadius) {
+  const scale = d3
+    .scaleLinear()
+    .domain([1, 99])
+    .range([1, maxRadius]);
   const hexagon = [];
   for (i = 1; i <= 13; i += 2) {
-    hexagon.push([i * Math.PI/6, radiusInfo.shift()]);
+    hexagon.push([i * Math.PI/6, scale(radiusInfo.shift())]);
   }
   return d3.lineRadial()(hexagon);
 }
 
-function showCards(players) {
-  const scale = d3
-    .scaleRadial()
-    .domain([1, 99])
-    .range([0, 20]);
+function dataJoin(players) {
 
   /*
   const escalaY = d3
@@ -132,20 +93,73 @@ function showCards(players) {
       joinDeDatos(datos);
     });
     */
+}
 
-  player = players[0];
-  const playerInfo = [player.PHYSICAL, player.PACE, player.SHOOTING, player.PASSING, player.DRIBBLING, player.DEFENDING, player.PHYSICAL];
-  chartContainer
+function wrapText(text, limit) {
+  //wrap name here
+}
+
+function addCard(cards) {
+  const card = cards.append('svg').attr('class', 'card')
+  card
+    .append('rect')
+    .attr('fill', 'none')
+    .attr('stroke', 'black')
+
+  const info = card
+    .append('g')
+    .attr('transform', `translate(10 30)`)
+  info.append('text').text((p) => p.RATING)
+    .attr('class', 'big-title').attr('x', '1%')
+  info.append('text').text((p) => p.NAME)
+    .attr('class', 'title').attr('x', '22%')
+  info.append('text').text((p) => p.NAME)
+    .attr('class', 'title').attr('x', '22%').attr('y', '7%')
+  //info.append('text').text('Christodoulopoulos Lazaros')
+    //.attr('class', 'title').attr('x', '15%')
+  info.append('text').text((p) => p.POSITION)
+    .attr('class', 'title').attr('x', '0%').attr('y', '7%')
+  info.append('text').text((p) => p.CLUB)
+    .attr('class', 'sub-title').attr('x', '10%').attr('y', '15%')
+  info.append('text').text((p) => p.CLUB)
+    .attr('class', 'sub-title').attr('x', '10%').attr('y', '20%')
+  info.append('text').text((p) => p.LEAGUE)
+    .attr('class', 'sub-title').attr('x', '6%').attr('y', '25%')
+  info.append('text').text((p) => p.LEAGUE)
+    .attr('class', 'sub-title').attr('x', '6%').attr('y', '30%')
+
+  const chart = card
+    .append('g')
+    .attr('transform', `translate(150 280)`)
+  chart
+    .append('circle')
+    .attr('r', 110)
+    .attr('fill', 'none')
+    .attr('stroke', 'black')
+  chart
     .append('path')
-    .attr('d', drawHexagon(playerInfo))
+    .attr('d', drawHexagon([100, 100, 100, 100, 100, 100, 100], 80))
+    .attr('fill', 'none')
+    .attr('stroke', 'black')
+  chart
+    .append('path')
+    .attr('d', (p) => drawHexagon([p.PHYSICAL, p.PACE, p.SHOOTING, p.PASSING,
+      p.DRIBBLING, p.DEFENDING, p.PHYSICAL], 80))
     .attr('fill', 'red')
-    .selection()
+}
+
+function loadCards(players) {
+  cardContainer
+    .selectAll('.card')
+    .data(players, (player) => player.NAME)
+    .join((enter) => addCard(enter))
 }
 
 
 // Read database info
 d3.csv('fifa_20_data.csv')
   .then((data) => {
-    showCards(data);
+    // loadCards([data[0], data[1], data[2], data[3], data[4]]);
+    loadCards(data);
   })
   .catch((error) => console.log(error));
