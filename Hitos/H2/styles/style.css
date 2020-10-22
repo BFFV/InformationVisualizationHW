@@ -1,14 +1,9 @@
 * {
   font-family: "Roboto", sans-serif;
-  text-align: center;
 }
 
 html {
-  background-color: white;
-}
-
-svg {
-  border: 2px solid #69359c;
+  background-color: #f4f6f7;
 }
 
 .big-title {
@@ -26,24 +21,40 @@ svg {
   font-size: large;
 }
 
+.label {
+  font-weight: bold;
+  font-size: smaller;
+}
+
 .flex-container {
   display: flex;
   flex-flow: row wrap;
+  height: 1000px;
 }
 
 .navbar {
-  background-color: wheat;
+  background-color: rgb(44, 62, 80);
   width: 20%;
+  height: 100%;
+  text-align: left;
+  padding-left: 1%;
 }
 
 .card-container {
   display: flex;
   flex-flow: row wrap;
-  width: 80%;
+  width: 79%;
+  height: 100%;
+  overflow: auto;
 }
 
 .card {
-  background-color: white;
   width: 300px;
   height: 400px;
+  padding: 10px;
+}
+
+.chart {
+  width: 280px;
+  height: 280px;
 }
