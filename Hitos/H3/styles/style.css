@@ -1,0 +1,36 @@
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  background-color: #f4f6f7;
+  text-align: center;
+}
+
+.big-title {
+  font-weight: bold;
+  font-size: xx-large;
+}
+
+.title {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.sub-title {
+  font-weight: bold;
+  font-size: large;
+}
+
+.label {
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.info {
+  background-color: rgb(44, 62, 80);
+  width: 20%;
+  height: 100%;
+  text-align: left;
+  padding-left: 1%;
+}
