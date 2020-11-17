@@ -3,8 +3,18 @@
 }
 
 html {
-  background-color: #f4f6f7;
+  background-color: #87D0C1;
   text-align: center;
+}
+
+button {
+  margin: 5px;
+  padding: 5px;
+}
+
+.button-set {
+  display: block;
+  margin: 0 auto;
 }
 
 .big-title {
@@ -27,10 +37,22 @@ html {
   font-size: smaller;
 }
 
-.info {
-  background-color: rgb(44, 62, 80);
-  width: 20%;
-  height: 100%;
-  text-align: left;
-  padding-left: 1%;
+.container {
+  display: flex;
+}
+
+#map {
+  width: 50%;
+}
+
+#geo-map {
+  background-color: #f4f6f7;
+}
+
+#svg-graph {
+  background-color: #f4f6f7;
+}
+
+#info {
+  width: 50%;
 }

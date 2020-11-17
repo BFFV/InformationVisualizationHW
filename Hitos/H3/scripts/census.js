@@ -1,46 +1,84 @@
-// Census map
-const censusGraph = async (height, width, margin) => {
-  // Map container
-  const svg = d3
-    .select('#map')
+// Update Graph
+function updateGraph (selectedData, censusData) {
+  // Census data
+  const data = censusData.filter((c) => selectedData.includes(c.ID));
+  const maxPopulation = Math.max(...data.map(c => c.TOTAL_PERS));
+
+  // Dimensions
+  const width = 550;
+  const height = 400;
+
+  // Scales
+  const scaleX = d3.scaleBand()
+    .domain(data.map((d) => d.ID))
+    .rangeRound([0, width])
+    .padding(0.5)
+  const scaleY = d3.scaleLinear()
+    .domain([0, maxPopulation])
+    .range([height, 0])
+  const scaleHeight = d3.scaleLinear()
+    .domain([0, maxPopulation])
+    .range([0, height])
+
+  // Create/Update graph
+  const graph = d3.select('#graph');
+  graph
+    .selectAll('rect')
+    .data(data, (d) => d.ID)
+    .join('rect')
+      .attr('x', (d) => scaleX(d.ID))
+      .attr('y', (d) => scaleY(d.TOTAL_PERS))
+      .attr('width', scaleX.bandwidth())
+      .attr('height', (d) => scaleHeight(d.TOTAL_PERS))
+      .attr('fill', 'red')
+}
+
+// Census Map
+const censusGraph = (height, width, margin, geoData, census) => {
+  // Map Container
+  const map = d3.select('#map');
+  const svg = map
     .append('svg')
       .attr('width', width)
       .attr('height', height)
-  svg
-    .append('rect')
-      .attr('width', '100%')
-      .attr('fill', 'none')
-      .attr('stroke', 'black')
-
+      .attr('id', 'geo-map')
   const container = svg
     .append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`)
-
-  // Map Communes
   const communes = container.append('g');
+  svg.append('rect')
+    .attr('width', '100%')
+    .attr('fill', 'none')
+    .attr('stroke', 'black')
+    .attr('stroke-width', 3)
 
-  // Commune Data
-  const geoData = await d3.json('../data/comunas.geojson');
-  const census = await d3.csv('../data/censo.csv');
-  const minDensity = Math.min(...census.map(c => c.DENSIDAD))
-  const maxDensity = Math.max(...census.map(c => c.DENSIDAD))
+  // Density Limits
+  const maxDensity = Math.max(...census.map(c => c.DENSIDAD));
 
   // Zoom/Pan
+  const initialState = d3.zoomIdentity.translate(-1800, -730).scale(4.6);
   const zoom = d3.zoom()
-    .scaleExtent([0.6, 100])
-    .on('zoom', (e) => container.attr('transform', e.transform));
-
+    .extent([
+      [0, 0],
+      [width, height]
+    ])
+    .translateExtent([
+      [-100, -50],
+      [width + 100, height + 50]
+    ])
+    .scaleExtent([1, 100])
+    .on('zoom', (e) => container.attr('transform', e.transform))
   svg.call(zoom);
+  svg.call(zoom.transform, initialState);
 
-  // Density Map
+  // Density Map Properties
   const geoScale = d3
     .geoMercator()
     .fitSize(
       [width - margin.left - margin.right, height - margin.top - margin.bottom],
       geoData)
-
+  const logScale = d3.scaleLog().domain([0.1, maxDensity]);
   const logValue = (density) => {
-    const logScale = d3.scaleLog().domain([0.1, maxDensity]);
     if (density < 0.1) {
       return logScale(0.1);
     }
@@ -48,39 +86,77 @@ const censusGraph = async (height, width, margin) => {
   }
   const fillScale = d3
     .scaleSequential()
-    .domain([logValue(minDensity), logValue(maxDensity)])
+    .domain([0, 1])
     .interpolator(d3.interpolateBlues)
-
   const geoPaths = d3.geoPath().projection(geoScale);
 
-  /*
-  const clicked = (event, d) => {
-    const [[x0, y0], [x1, y1]] = geoPaths.bounds(d);
-
-    svg
-      .transition()
-        .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity
-            .translate(width / 2, height / 2)
-            .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
-            .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-          d3.pointer(event, svg.node())
-    );
-
-    const circles = points
-      .selectAll('circle')
-        .transition()
-        .attr('r', 0)
-
-    circles
-      .filter((point) => point.state === d.properties.NAME)
-        .transition()
-        .attr('r', 2)
+  // Legend & Panning Options
+  const densityValues = [0, 1, 10, 100, 1000, 10000, 15000];
+  const scaleX = d3.scaleBand()
+    .domain(densityValues)
+    .rangeRound([0, 500])
+    .padding(0)
+  const legend = map.append('svg')
+    .attr('height', 60)
+    .attr('width', 510)
+  const squares = legend.append('g');
+  for (let i = 0; i < 7; i++) {
+    squares
+      .append('rect')
+        .attr('x', scaleX(densityValues[i]))
+        .attr('y', 0)
+        .attr('width', scaleX.bandwidth())
+        .attr('height', 40)
+        .attr('fill', fillScale(logValue(densityValues[i])))
   }
-  */
+  const ticks = [0, 1, 10, 100, 1000, 10000, 15000];
+  const axis = d3.axisTop(scaleX).tickValues(ticks);
+  legend.append('g')
+    .attr('transform', 'translate(0, 50)')
+    .call(axis)
+  const bigNorthState = d3.zoomIdentity.translate(-2853, -15).scale(6);
+  const smallNorthState = d3.zoomIdentity.translate(-2797, -596).scale(6);
+  const centralState = d3.zoomIdentity.translate(-2722, -1160).scale(6);
+  const southState = d3.zoomIdentity.translate(-2611, -1856).scale(6);
+  const australState = d3.zoomIdentity.translate(-1148, -1280).scale(3);
+  const states = [initialState, bigNorthState, smallNorthState,
+    centralState, southState, australState];
+  const stateNames = ['Inicio', 'Norte Grande', 'Norte Chico',
+    'Centro', 'Sur', 'Austral'];
+  map.append('h3').text('Zonas del Mapa');
+  const buttons = map.append('div').attr('class', 'button-set');
+  for (let i = 0; i < 6; i++) {
+    buttons
+      .append('button')
+      .text(stateNames[i])
+      .on('click', () => {
+        container.attr('transform', states[i]);
+        svg.call(zoom.transform, states[i]);
+      })
+  }
 
+  // Select Communes
+  const selected = (id) => {
+    // Clicked commune
+    const selected_commune = communes
+      .selectAll('path')
+      .filter((d) => d.properties.id == id)
+
+    // Unselect/Select commune
+    if (selectedData.includes(id)) {
+      const index = selectedData.indexOf(id);
+      selectedData.splice(index, 1);
+      selected_commune
+        .attr('fill', (d) => fillScale(logValue(census.find(c => c.ID == d.properties.id).DENSIDAD)))
+    } else {
+      selectedData.push(id);
+      selected_commune
+        .attr('fill', 'green')
+    }
+    updateGraph(selectedData, census);
+  }
+
+  // Map DataJoin
   communes
     .selectAll('path')
     .data(geoData.features, (d) => d.properties.id)
@@ -89,107 +165,41 @@ const censusGraph = async (height, width, margin) => {
       .attr('fill', (d) => fillScale(logValue(census.find(c => c.ID == d.properties.id).DENSIDAD)))
       .attr('stroke', '#1F1F1F')
       .attr('stroke-width', 0.03)
-    // .on('click', clicked)
+    .on('click', (_, d) => selected(d.properties.id))
 }
 
-// Info view
-const info = async (height, width, margin) => {
-  /*
-  const svg = d3
-    .select('#graph')
+// Info View
+const info = (census) => {
+  // View
+  const info = d3.select('#info');
+
+  // Info Graph
+  const svg = info
     .append('svg')
-        .attr('width', width)
-        .attr('height', height);
-
-  const container = svg
-    .append('g')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`)
-
-  const states = container.append('g')
-
-  const points = container.append('g')
-
-  const geoData = await d3.json('../data/USA.geo.json')
-  const killings = await d3.csv('../data/police_killings.csv')
-  const stateData = await d3.json('../data/state_data.json')
-  const maxKillings = Math.max(...Object.values(stateData).map((d) => +d))
-
-  const zoom = d3.zoom()
-    .scaleExtent([0.25, 8])
-    .on('zoom', (e) => container.attr('transform', e.transform));
-
-  svg.call(zoom)
-
-  const geoScale = d3
-    .geoMercator()
-    .fitSize(
-      [width - margin.left - margin.right, height - margin.top - margin.bottom], 
-      geoData
-    );
-
-  const fillScale = d3
-    .scaleSequential()
-    .interpolator(d3.interpolateReds)
-    .domain([-1, maxKillings])
-
-  const geoPaths = d3.geoPath().projection(geoScale);
-
-  const clicked = (event, d) => {
-    const [[x0, y0], [x1, y1]] = geoPaths.bounds(d);
-
-    svg
-      .transition()
-        .duration(750)
-        .call(
-          zoom.transform,
-          d3.zoomIdentity
-            .translate(width / 2, height / 2)
-            .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
-            .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-          d3.pointer(event, svg.node())
-    );
-
-    const circles = points
-      .selectAll('circle')
-        .transition()
-        .attr('r', 0)
-
-    circles
-      .filter((point) => point.state === d.properties.NAME)
-        .transition()
-        .attr('r', 2)
-  }
-
-  states
-    .selectAll('path')
-    .data(geoData.features, (d) => d.properties.NAME)
-    .join('path')
-      .attr('d', geoPaths)
-      .attr('fill', (d) => fillScale(stateData[d.properties.NAME]))
-      .attr('stroke', '#bbb')
-    .on('click', clicked)
-
-
-
-  points
-    .selectAll('circle')
-    .data(killings, (d) => d.state)
-    .join('circle')
-      .attr('cx', ({ latitude, longitude }) => geoScale([longitude, latitude])[0])
-      .attr('cy', ({ latitude, longitude }) => geoScale([longitude, latitude])[1])
-      .attr('r', 0)
-      .attr('fill', 'white')
-      .attr('stroke', 'red')
-  */
+      .attr('width', 600)
+      .attr('height', 600)
+      .attr('id', 'svg-graph')
+  svg.append('g')
+    .attr('transform', 'translate(40, 20)')
+    .attr('id', 'graph');
+  updateGraph(selectedData, census);
 }
 
-const width = 800;
-const height = 600;
-const margin = {
-  top: 20,
-  left: 20,
-  right: 20,
-  bottom: 20,
-};
+// Load Data
+const initialize = async () => {
+  const geoData = await d3.json('../data/comunas.geojson');
+  let census = await d3.csv('../data/censo.csv');
+  const parseData = (object) => {
+    object.ID = parseInt(object.ID, 10);
+    return object;
+  }
+  census = census.map(parseData);
+  return [geoData, census];
+}
 
-censusGraph(height, width, margin);
+// Initialize Visualization
+const selectedData = [];
+initialize().then(([geoData, census]) => {
+  censusGraph(700, 600, {top: 20, left: 20, right: 20, bottom: 20}, geoData, census);
+  info(census);
+})
