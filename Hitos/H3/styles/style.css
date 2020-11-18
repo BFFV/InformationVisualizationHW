@@ -3,23 +3,14 @@
 }
 
 html {
-  background-color: #87D0C1;
+  background-color: #3DD5B7;
   text-align: center;
 }
 
 button {
   margin: 5px;
   padding: 5px;
-}
-
-.button-set {
-  display: block;
-  margin: 0 auto;
-}
-
-.big-title {
   font-weight: bold;
-  font-size: xx-large;
 }
 
 .title {
@@ -34,11 +25,21 @@ button {
 
 .label {
   font-weight: bold;
-  font-size: smaller;
+  font-size: normal;
+}
+
+.big-label {
+  font-weight: bold;
+  font-size: larger;
 }
 
 .container {
   display: flex;
+}
+
+.button-set {
+  display: block;
+  margin: 0 auto;
 }
 
 #map {
