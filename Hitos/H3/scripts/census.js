@@ -139,6 +139,15 @@ function updateGraph(selectedData, censusData) {
 const geoMap = (height, width, margin, geoData, census) => {
   // Map Container
   const map = d3.select('#map');
+  const names = map.append('div').attr('id', 'names');
+  names.append('p')
+    .text('Comuna:')
+    .attr('class', 'sub-title')
+    .attr('id', 'c-text')
+  const name = names.append('p')
+    .text('')
+    .attr('class', 'sub-title')
+    .attr('id', 'c-name')
   const svg = map
     .append('svg')
       .attr('width', width)
@@ -255,13 +264,32 @@ const geoMap = (height, width, margin, geoData, census) => {
       const index = selectedData.indexOf(id);
       selectedData.splice(index, 1);
       selected_commune
-        .attr('fill', (d) => fillScale(logValue(census.find(c => c.ID == d.properties.id).DENSIDAD)))
+        .attr('fill', (d) => fillScale(logValue(census.find((c) => c.ID == d.properties.id).DENSIDAD)))
     } else {
       selectedData.push(id);
       selected_commune
         .attr('fill', 'green')
     }
     updateGraph(selectedData, census);
+  }
+
+  // Highlight Communes
+  const highlight = (id) => {
+    const selected_commune = communes
+      .selectAll('path')
+      .filter((d) => d.properties.id == id)
+    selected_commune.attr('opacity', 0.6);
+    const cName = census.find((c) => c.ID == id).NOM_COMUNA;
+    name.text(`${cName}`);
+  }
+
+  // Stop Highlight
+  const stopHighlight = (id) => {
+    const selected_commune = communes
+      .selectAll('path')
+      .filter((d) => d.properties.id == id)
+    selected_commune.attr('opacity', 1);
+    name.text('');
   }
 
   // Map DataJoin
@@ -274,6 +302,8 @@ const geoMap = (height, width, margin, geoData, census) => {
       .attr('stroke', '#1F1F1F')
       .attr('stroke-width', 0.03)
     .on('click', (_, d) => selected(d.properties.id))
+    .on('mouseenter', (_, d) => highlight(d.properties.id))
+    .on('mouseleave', (_, d) => stopHighlight(d.properties.id))
 }
 
 // Info View
@@ -284,7 +314,7 @@ const info = (census) => {
   const svg = info
     .append('svg')
       .attr('width', 620)
-      .attr('height', 661)
+      .attr('height', 700)
       .attr('id', 'svg-graph')
   svg.append('rect')
     .attr('width', '100%')
@@ -311,11 +341,12 @@ const info = (census) => {
     .append('text')
       .text('Hombres')
       .attr('x', 50)
-      .attr('y', 25)
+      .attr('y', 45)
       .attr('class', 'sub-title')
   legend
     .append('rect')
       .attr('x', 140)
+      .attr('y', 20)
       .attr('width', 50)
       .attr('height', 40)
       .attr('fill', 'red')
@@ -324,11 +355,12 @@ const info = (census) => {
     .append('text')
       .text('Mujeres')
       .attr('x', 270)
-      .attr('y', 25)
+      .attr('y', 45)
       .attr('class', 'sub-title')
   legend
     .append('rect')
       .attr('x', 350)
+      .attr('y', 20)
       .attr('width', 50)
       .attr('height', 40)
       .attr('fill', 'blue')

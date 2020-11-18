@@ -42,6 +42,24 @@ button {
   margin: 0 auto;
 }
 
+#names {
+  display: flex;
+}
+
+#names p {
+  margin-top: 0px;
+  width: 50%;
+}
+
+#c-text {
+  text-align: right;
+  margin-right: 20px;
+}
+
+#c-name {
+  text-align: left;
+}
+
 #map {
   width: 50%;
 }
