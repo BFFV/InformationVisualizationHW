@@ -1,0 +1,86 @@
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  background-color: #3DD5B7;
+  text-align: center;
+}
+
+button {
+  margin: 5px;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.title {
+  font-weight: bold;
+  font-size: x-large;
+}
+
+.sub-title {
+  font-weight: bold;
+  font-size: large;
+}
+
+.label {
+  font-weight: bold;
+  font-size: normal;
+}
+
+.big-label {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.container {
+  display: flex;
+}
+
+.button-set {
+  display: block;
+  margin: 0 auto;
+}
+
+.description {
+  text-align: justify;
+}
+
+#report {
+  margin: 0 auto;
+  width: 80%;
+}
+
+#names {
+  display: flex;
+}
+
+#names p {
+  margin-top: 0px;
+  width: 50%;
+}
+
+#c-text {
+  text-align: right;
+  margin-right: 20px;
+}
+
+#c-name {
+  text-align: left;
+}
+
+#map {
+  width: 50%;
+}
+
+#geo-map {
+  background-color: #f4f6f7;
+}
+
+#svg-graph {
+  background-color: #f4f6f7;
+}
+
+#info {
+  width: 50%;
+}

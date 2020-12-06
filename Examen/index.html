@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>H3 - IIC2026</title>
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3js.org/d3-geo-projection.v3.min.js"></script>
+  </head>
+
+  <body>
+    <h1>Hito 3 - IIC2026</h1>
+    <div class="container">
+      <div id="map"><h2>Densidad Poblacional por Comuna (hab/km^2)</h2></div>
+      <div id="info">
+        <h2>Total de Habitantes y Proporción Hombres/Mujeres</h2>
+        <p class="sub-title">Haz click sobre las comunas en el mapa para ver su información!<p>
+      </div>
+    </div>
+    <div id="report">
+      <h1>Informe de Diseño</h1>
+      <div class="description">
+        <h3>Mapa Coroplético</h3>
+        <ul>
+          <li>El atributo elegido para representar a cada comuna en el mapa fue la DENSIDAD poblacional,
+            de forma que se pueda apreciar a grandes rasgos como se distribuye la población a lo largo del país. Para asociar los datos al colormap se aplicó una
+             escala logarítmica, debido a que la diferencia entre las comunas con mayor y menor densidad era enorme.</li>
+          <li>El colormap a utilizar corresponde a una escala de azules, partiendo desde el más claro (densidad muy baja)
+            hacia el más oscuro (alta densidad). Se optó por estos colores, puesto que al ser todos de la misma paleta se puede
+             asociar fácilmente la densidad con la tonalidad/fuerza del azul correspondiente (también se pudo haber usado la escala de rojos, que es bastante popular).
+              Se colocó una leyenda bajo el mapa, permitiendo ver la asociación entre tonalidades del azul y valores de densidad (medidos en hab/km^2).</li>
+          <li>La proyección cartográfica seleccionada fue la de Mercator, debido a que el enfoque del mapa eran las comunas
+            del país de Chile. Al no ser una escala tan grande (en comparación a un mapa del mundo entero), la distorsión no es relevante para el usuario. Otras escalas
+             más realistas producen curvaturas en las formas conocidas del mapa, por lo que podrían provocar confusión en el usuario en vez de apoyar a la visualización
+              (en este caso específico).</li>
+          <li>Para realizar zoom sobre el mapa basta con hacer uso del scroll del ratón (o equivalente). También es posible aplicar zoom de forma más precisa haciendo
+            doble click rápidamente sobre un punto del mapa. Para el panning, se debe simplemente arrastrar el mapa manteniendo el click del ratón.</li>
+          <li>Se decidió limitar el panning, de forma que no sea posible dejar una parte significativa del mapa fuera del recuadro. En cuanto al zoom,
+            este es posible realizarlo hasta una escala de 100 veces más grande, valor en el que se puede apreciar fácilmente la forma de las comunas más pequeñas.</li>
+          <li>Existen distintos botones en la parte inferior del mapa, los que actúan como atajos automáticos a distintas zonas de interés (zonas geográficas de
+            Chile, además de la posición inicial de la visualización).</li>
+          <li>Al pasar el ratón por encima de las comunas del mapa, estas se destacan (volviéndose más claras) y se pueden ver sus nombres dinámicamente arriba del mapa.
+            Al hacer click sobre una comuna, esta se pinta de verde (para facilitar la identificación de comunas actualmente seleccionadas), y su información es
+            enviada a la vista alternativa. Análogamente, al volver a hacer click sobre una comuna ya seleccionada, esta vuelve a su color normal y desaparece de la
+             vista alternativa.
+          </li>
+        </ul>
+      </div>
+      <div class="description">
+        <h3>Vista Alternativa</h3>
+        <ul>
+          <li>En esta vista se decidió implementar un gráfico de barras apiladas, en el que se puede apreciar la población total de cada comuna seleccionada,
+             además de la proporción de hombres/mujeres en dicha comuna. Esto permite analizar en mayor detalle cada comuna, así como también contrastarlas entre sí.</li>
+          <li>Cada barra del gráfico representa una comuna seleccionada, en donde su área roja representa a la cantidad total de hombres, mientras que el área azul
+             representa a la cantidad total de mujeres. Ambas áreas están en proporción según el porcentaje de la población que les corresponde.</li>
+          <li>Al colocar el ratón sobre alguna barra, se genera un recuadro que muestra detalles sobre el número de personas y porcentaje asociado en dicha comuna. El nombre de la
+             comuna asociada a la barra sobre la que está el ratón se muestra abajo del gráfico.</li>
+          <li>En la parte inferior del recuadro se encuentra la leyenda del gráfico, que indica que el color rojo representa a los hombres y el azul a las mujeres.</li>
+          </li>
+        </ul>
+      </div>
+      <div class="description">
+        <h3>Organización Espacial</h3>
+        <p>La vista del mapa coroplético ocupa la mitad izquierda de la pantalla (con el mapa en sí de tamaño fijo), mientras que la vista alternativa ocupa la mitad derecha (con el recuadro de tamaño fijo). Al distribuir el
+           ancho de la pantalla de manera equitativa entra ambas vistas, se logra que el usuario se dé cuenta rápidamente de que existe una relación entre ambos
+            idioms, y que ambos son igual de relevantes. Además, se incluye una breve instrucción en la vista alternativa, de forma que el usuario sepa que es posible
+             seleccionar comunas en el mapa para luego analizarlas en el gráfico de la derecha. Finalmente, por temas de consistencia en el diseño, se colocaron las
+              leyendas de ambos idioms en la parte inferior de su vista correspondiente.</p>
+      </div>
+    </div>
+    <script src='scripts/census.js' charset='utf-8'></script>
+  </body>
+</html>
