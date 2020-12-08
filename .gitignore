@@ -7,7 +7,7 @@ __pycache__/
 *.DS_STORE
 *.idea
 *.vscode/
-Examen/data/
+Examen/processing/
 
 # C extensions
 *.so
