@@ -1,3 +1,11 @@
+// Definitions
+const network = d3.select('#network');
+const networkSize = {
+  width: network.style('width'),
+  height: Math.floor(parseInt(network.style('width'), 10) / 2)};
+network.style('height', `${networkSize.height}px`);
+const selectedData = [];
+
 // Create/Update Bar Graph
 function updateGraph(selectedData, censusData) {
   // Census data
@@ -135,39 +143,30 @@ function updateGraph(selectedData, censusData) {
       .attr('pointer-events', 'none')
 }
 
-// Create Geo Map
-const geoMap = (height, width, margin, geoData, census) => {
-  // Map Container
-  const map = d3.select('#map');
-  const names = map.append('div').attr('id', 'names');
-  names.append('p')
-    .text('Comuna:')
-    .attr('class', 'sub-title')
-    .attr('id', 'c-text')
-  const name = names.append('p')
-    .text('')
-    .attr('class', 'sub-title')
-    .attr('id', 'c-name')
-  const svg = map
+// Generate Steam Games Network
+const gameNetwork = (height, width, games) => {
+  // Graph Container
+  const svg = network
     .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('id', 'geo-map')
-  const container = svg
-    .append('g')
-      .attr('transform', `translate(${margin.left}, ${margin.top})`)
-  const communes = container.append('g');
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('id', 'graphContainer')
   svg.append('rect')
     .attr('width', '100%')
+    .attr('height', '100%')
     .attr('fill', 'none')
     .attr('stroke', 'black')
     .attr('stroke-width', 3)
+  const graph = svg.append('g')
+    .attr('transform', `translate(200, 100)`)
 
+  /*
   // Density Limits
   const maxDensity = Math.max(...census.map(c => c.DENSIDAD));
+  */
 
   // Zoom/Pan
-  const initialState = d3.zoomIdentity.translate(-1800, -730).scale(4.6);
+  const initialState = d3.zoomIdentity.translate(0, 0).scale(1);
   const zoom = d3.zoom()
     .extent([
       [0, 0],
@@ -177,81 +176,37 @@ const geoMap = (height, width, margin, geoData, census) => {
       [-100, -50],
       [width + 100, height + 50]
     ])
-    .scaleExtent([1, 100])
-    .on('zoom', (e) => container.attr('transform', e.transform))
+    .scaleExtent([1, 5])
+    .on('zoom', (e) => network.attr('transform', e.transform))
   svg.call(zoom);
+  /*
   svg
     .transition()
     .duration(2000)
     .call(zoom.transform, initialState)
+  */
 
-  // Density Map Properties
-  const geoScale = d3
-    .geoMercator()
-    .fitSize(
-      [width - margin.left - margin.right, height - margin.top - margin.bottom],
-      geoData)
-  const logScale = d3.scaleLog().domain([0.1, maxDensity]);
-  const logValue = (density) => {
-    if (density < 0.1) {
-      return logScale(0.1);
-    }
-    return logScale(density);
-  }
   const fillScale = d3
     .scaleSequential()
     .domain([0, 1])
     .interpolator(d3.interpolateBlues)
-  const geoPaths = d3.geoPath().projection(geoScale);
 
   // Legend & Panning Options
-  const densityValues = [0, 1, 10, 100, 1000, 10000, 15000];
-  const scaleX = d3.scaleBand()
-    .domain(densityValues)
-    .rangeRound([0, 500])
-    .padding(0)
-  const legend = map.append('svg')
-    .attr('height', 65)
-    .attr('width', 510)
-  const squares = legend.append('g');
-  for (let i = 0; i < 7; i++) {
-    squares
-      .append('rect')
-        .attr('x', scaleX(densityValues[i]))
-        .attr('y', 0)
-        .attr('width', scaleX.bandwidth())
-        .attr('height', 40)
-        .attr('fill', fillScale(logValue(densityValues[i])))
-  }
-  const ticks = [0, 1, 10, 100, 1000, 10000, 15000];
-  const axis = d3.axisTop(scaleX).tickValues(ticks);
-  legend.append('g')
-    .attr('transform', 'translate(0, 60)')
-    .call(axis)
-  const bigNorthState = d3.zoomIdentity.translate(-2853, -15).scale(6);
-  const smallNorthState = d3.zoomIdentity.translate(-2797, -596).scale(6);
-  const centralState = d3.zoomIdentity.translate(-2722, -1160).scale(6);
-  const southState = d3.zoomIdentity.translate(-2611, -1856).scale(6);
-  const australState = d3.zoomIdentity.translate(-1148, -1280).scale(3);
-  const states = [initialState, bigNorthState, smallNorthState,
-    centralState, southState, australState];
-  const stateNames = ['Inicio', 'Norte Grande', 'Norte Chico',
-    'Centro', 'Sur', 'Austral'];
-  map.append('h3').text('Zonas del Mapa');
-  const buttons = map.append('div').attr('class', 'button-set');
-  for (let i = 0; i < 6; i++) {
+  const options = ['Inicio'];
+  const buttons = network.append('div').attr('class', 'button-set');
+  for (let i = 0; i < options.length; i++) {
     buttons
       .append('button')
-      .text(stateNames[i])
+      .text(options[i])
       .on('click', () => {
-        container.attr('transform', states[i]);
+        console.log(options[i]);
         svg
           .transition()
           .duration(1500)
-          .call(zoom.transform, states[i])
       })
   }
 
+  /*
   // Select Communes
   const selected = (id) => {
     // Clicked commune
@@ -291,19 +246,22 @@ const geoMap = (height, width, margin, geoData, census) => {
     selected_commune.attr('opacity', 1);
     name.text('');
   }
+  */
 
   // Map DataJoin
-  communes
+  graph
     .selectAll('path')
-    .data(geoData.features, (d) => d.properties.id)
-    .join('path')
-      .attr('d', geoPaths)
-      .attr('fill', (d) => fillScale(logValue(census.find(c => c.ID == d.properties.id).DENSIDAD)))
+    .data(games, (d) => d)
+    .join('circle')
+      .attr('r', 30)
+      .attr('cx', (d) => parseInt(d.steam_appid) / 1000)
+      .attr('cy', 0)
+      .attr('fill', (d) => 'red')
       .attr('stroke', '#1F1F1F')
       .attr('stroke-width', 0.03)
-    .on('click', (_, d) => selected(d.properties.id))
-    .on('mouseenter', (_, d) => highlight(d.properties.id))
-    .on('mouseleave', (_, d) => stopHighlight(d.properties.id))
+    //.on('click', (_, d) => selected(d.properties.id))
+    //.on('mouseenter', (_, d) => highlight(d.properties.id))
+    //.on('mouseleave', (_, d) => stopHighlight(d.properties.id))
 }
 
 // Info View
@@ -372,19 +330,24 @@ const info = (census) => {
 
 // Load Data
 const initialize = async () => {
-  const geoData = await d3.json('../data/comunas.geojson');
-  let census = await d3.csv('../data/censo.csv');
+  /* Columns: name, release_date, developer, publisher, platforms,
+    genres, price, positive, negative, steam_appid, short_description,
+    header_image, minimum */
+  const games = await d3.csv('../data/steam.csv');
+  /*
   const parseData = (object) => {
     object.ID = parseInt(object.ID, 10);
     return object;
   }
   census = census.map(parseData);
-  return [geoData, census];
+  */
+  return games.filter((game) => parseInt(game.steam_appid, 10) <= 10);
 }
 
 // Initialize Visualization
-const selectedData = [];
-initialize().then(([geoData, census]) => {
-  geoMap(700, 600, {top: 20, left: 20, right: 20, bottom: 20}, geoData, census);
-  info(census);
+initialize().then((games) => {
+  gameNetwork(network.height, network.width, games);
+  // Search View
+  // Comparison View
+  // Recommendation
 })

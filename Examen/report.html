@@ -3,59 +3,109 @@
   <head>
     <meta charset="utf-8">
     <title>Examen - IIC2026</title>
-    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/report.css" />
   </head>
 
   <body>
     <h1>Informe</h1>
     <div id="report">
       <div class="description">
-        <h3>Mapa Coroplético</h3>
+        <h2>Primer Nivel: Caracterización de Dominio</h2>
+        <p>Hoy en día, la industria de los videojuegos ha crecido enormemente, resultando en uno de los hobbies más comunes en el mundo. El catálogo más diverso
+           actualmente corresponde al de los juegos de computador, surgiendo así una comunidad inmensa de personas apasionadas por este gran arte. Estas personas
+            corresponden al usuario objetivo de este trabajo, el que busca entregar funcionalidades de utilidad para realizar consultas sobre el catálogo de la
+             plataforma/tienda más popular en la actualidad, conocida como Steam. Para realizar esto se decidió utilizar un conjunto de datasets que contienen
+              información sobre los videojuegos de Steam, aplicando una fase de preprocesamiento para unificarlos en un sólo dataset de interés.</p>
+        <h4>Consideraciones:</h4>
         <ul>
-          <li>El atributo elegido para representar a cada comuna en el mapa fue la DENSIDAD poblacional,
-            de forma que se pueda apreciar a grandes rasgos como se distribuye la población a lo largo del país. Para asociar los datos al colormap se aplicó una
-             escala logarítmica, debido a que la diferencia entre las comunas con mayor y menor densidad era enorme.</li>
-          <li>El colormap a utilizar corresponde a una escala de azules, partiendo desde el más claro (densidad muy baja)
-            hacia el más oscuro (alta densidad). Se optó por estos colores, puesto que al ser todos de la misma paleta se puede
-             asociar fácilmente la densidad con la tonalidad/fuerza del azul correspondiente (también se pudo haber usado la escala de rojos, que es bastante popular).
-              Se colocó una leyenda bajo el mapa, permitiendo ver la asociación entre tonalidades del azul y valores de densidad (medidos en hab/km^2).</li>
-          <li>La proyección cartográfica seleccionada fue la de Mercator, debido a que el enfoque del mapa eran las comunas
-            del país de Chile. Al no ser una escala tan grande (en comparación a un mapa del mundo entero), la distorsión no es relevante para el usuario. Otras escalas
-             más realistas producen curvaturas en las formas conocidas del mapa, por lo que podrían provocar confusión en el usuario en vez de apoyar a la visualización
-              (en este caso específico).</li>
-          <li>Para realizar zoom sobre el mapa basta con hacer uso del scroll del ratón (o equivalente). También es posible aplicar zoom de forma más precisa haciendo
-            doble click rápidamente sobre un punto del mapa. Para el panning, se debe simplemente arrastrar el mapa manteniendo el click del ratón.</li>
-          <li>Se decidió limitar el panning, de forma que no sea posible dejar una parte significativa del mapa fuera del recuadro. En cuanto al zoom,
-            este es posible realizarlo hasta una escala de 100 veces más grande, valor en el que se puede apreciar fácilmente la forma de las comunas más pequeñas.</li>
-          <li>Existen distintos botones en la parte inferior del mapa, los que actúan como atajos automáticos a distintas zonas de interés (zonas geográficas de
-            Chile, además de la posición inicial de la visualización).</li>
-          <li>Al pasar el ratón por encima de las comunas del mapa, estas se destacan (volviéndose más claras) y se pueden ver sus nombres dinámicamente arriba del mapa.
-            Al hacer click sobre una comuna, esta se pinta de verde (para facilitar la identificación de comunas actualmente seleccionadas), y su información es
-            enviada a la vista alternativa. Análogamente, al volver a hacer click sobre una comuna ya seleccionada, esta vuelve a su color normal y desaparece de la
-             vista alternativa.
-          </li>
+          <li>Los datasets originales se pueden encontrar en el siguiente link: https://www.kaggle.com/nikdavis/steam-store-games.</li>
+          <li>El dataset unificado es el que se encuentra en la carpeta 'data' entregada, y es el utilizado por la herramienta de visualización.</li>
+          <li>Para realizar el preprocesamiento se utilizó la librería pandas de python (con python 3.8), uniendo los datos relevantes de todos los videojuegos en un sólo dataset mediante
+             joins entre los datasets originales. El script utilizado se encuentra adjunto ('process.py').</li>
+          <li>La herramienta está hecha en Inglés, buscando apelar a una mayor cantidad de usuarios a nivel global.</li>
+          <li>Para poder aprovechar la herramienta al 100% se recomienda estar conectado a internet (por temas de imágenes customizadas).</li>
         </ul>
       </div>
       <div class="description">
-        <h3>Vista Alternativa</h3>
-        <ul>
-          <li>En esta vista se decidió implementar un gráfico de barras apiladas, en el que se puede apreciar la población total de cada comuna seleccionada,
-             además de la proporción de hombres/mujeres en dicha comuna. Esto permite analizar en mayor detalle cada comuna, así como también contrastarlas entre sí.</li>
-          <li>Cada barra del gráfico representa una comuna seleccionada, en donde su área roja representa a la cantidad total de hombres, mientras que el área azul
-             representa a la cantidad total de mujeres. Ambas áreas están en proporción según el porcentaje de la población que les corresponde.</li>
-          <li>Al colocar el ratón sobre alguna barra, se genera un recuadro que muestra detalles sobre el número de personas y porcentaje asociado en dicha comuna. El nombre de la
-             comuna asociada a la barra sobre la que está el ratón se muestra abajo del gráfico.</li>
-          <li>En la parte inferior del recuadro se encuentra la leyenda del gráfico, que indica que el color rojo representa a los hombres y el azul a las mujeres.</li>
-          </li>
-        </ul>
+        <h2>Segundo Nivel: Abstracción de Datos y Tareas</h2>
+        <div class="task">
+          <h3>Tarea 1: </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">CORRELACIÓN</h3>
+          <h3> Descubrir nuevos juegos en la red</h3>
+          <p>A
+          </p>
+          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
+             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
+              y sobre las divisiones geopolíticas de interés).
+          </p>
+          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
+              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          </p>
+        </div>
+        <div class="task">
+          <h3>Tarea 2: </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">CORRELACIÓN</h3>
+          <h3> Localizar juegos conocidos para revisar sus vecinos en la red (search bar)</h3>
+          <p>a
+          </p>
+          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
+             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
+              y sobre las divisiones geopolíticas de interés).
+          </p>
+          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
+              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          </p>
+        </div>
+        <div class="task">
+          <h3>Tarea 3: </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">CORRELACIÓN</h3>
+          <h3> comparar juegos entre sí y ver sus detalles para decidir cuál comprar</h3>
+          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
+            la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
+             Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+          </p>
+          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
+             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
+              y sobre las divisiones geopolíticas de interés).
+          </p>
+          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
+              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          </p>
+        </div>
+        <div class="task">
+          <h3>Tarea 4: </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">CORRELACIÓN</h3>
+          <h3> Filtrar juegos según parámetros</h3>
+          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
+            la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
+             Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+          </p>
+          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
+             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
+              y sobre las divisiones geopolíticas de interés).
+          </p>
+          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
+              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          </p>
+        </div>
+        <div class="task">
+          <h3>Tarea 5: </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">CORRELACIÓN</h3>
+          <h3> recomendarme juegos basado en los que he seleccionado</h3>
+          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
+            la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
+             Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+          </p>
+          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
+             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
+              y sobre las divisiones geopolíticas de interés).
+          </p>
+          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
+              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          </p>
+        </div>
       </div>
       <div class="description">
-        <h3>Organización Espacial</h3>
-        <p>La vista del mapa coroplético ocupa la mitad izquierda de la pantalla (con el mapa en sí de tamaño fijo), mientras que la vista alternativa ocupa la mitad derecha (con el recuadro de tamaño fijo). Al distribuir el
-           ancho de la pantalla de manera equitativa entra ambas vistas, se logra que el usuario se dé cuenta rápidamente de que existe una relación entre ambos
-            idioms, y que ambos son igual de relevantes. Además, se incluye una breve instrucción en la vista alternativa, de forma que el usuario sepa que es posible
-             seleccionar comunas en el mapa para luego analizarlas en el gráfico de la derecha. Finalmente, por temas de consistencia en el diseño, se colocaron las
-              leyendas de ambos idioms en la parte inferior de su vista correspondiente.</p>
+        <h2>Tercer Nivel: Codificación Visual y de Interacción</h2>
+        <p>A</p>
+        <ul>
+          <li>A</li>
+        </ul>
       </div>
     </div>
   </body>

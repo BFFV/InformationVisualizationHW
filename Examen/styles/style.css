@@ -3,7 +3,7 @@
 }
 
 html {
-  background-color: #3DD5B7;
+  background-color: #175376;
   text-align: center;
 }
 
@@ -33,10 +33,6 @@ button {
   font-size: larger;
 }
 
-.container {
-  display: flex;
-}
-
 .button-set {
   display: block;
   margin: 0 auto;
@@ -46,11 +42,19 @@ button {
   text-align: justify;
 }
 
-#report {
-  margin: 0 auto;
-  width: 80%;
+.container {
+  display: flex;
 }
 
+#network {
+  width: 60%;
+}
+
+#graphContainer {
+  background-color: white;
+}
+
+/* H3 (delete later)*/
 #names {
   display: flex;
 }
@@ -70,7 +74,7 @@ button {
 }
 
 #map {
-  width: 50%;
+  width: 100%;
 }
 
 #geo-map {

@@ -1,0 +1,35 @@
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+html {
+  background-color: rgb(41, 41, 41);
+  text-align: center;
+  color: #DDE1E3;
+}
+
+h1 {
+  color: rgb(74, 221, 241);
+}
+
+h2 {
+  color: rgb(252, 255, 79);
+}
+
+h3 {
+  color: rgb(253, 176, 176);
+}
+
+.task h3 {
+  display: inline;
+}
+
+.highlight {
+  color: orange;
+}
+
+#report {
+  margin: 0 auto;
+  width: 80%;
+  text-align: justify;
+}

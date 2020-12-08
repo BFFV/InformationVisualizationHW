@@ -1,4 +1,6 @@
 import pandas as pd
+import json
+from datetime import datetime
 
 
 # Transform rating amount into proportion
@@ -13,8 +15,9 @@ def get_ratings_proportion(row):
 # Games data
 data = pd.read_csv(
     'steam.csv', usecols=['appid', 'name', 'release_date', 'developer',
-                          'publisher', 'platforms', 'genres',
-                          'positive_ratings', 'negative_ratings', 'price'])
+                          'publisher', 'platforms', 'genres', 'steamspy_tags',
+                          'positive_ratings', 'negative_ratings',
+                          'price'])
 data['price'] = data['price'].apply(lambda x: round(x * 1.34, 2))
 data['positive'] = data.apply(
     lambda row: get_ratings_proportion(row)['positive'], axis=1)
@@ -39,3 +42,26 @@ requirements_data = pd.read_csv(
 data = pd.merge(data, requirements_data, on='steam_appid')
 
 data.to_csv('results/steam.csv', index=False)
+
+# Network data
+network_data = dict()
+for _, game in data.iterrows():
+    for genre in game.genres.split(';'):
+        if genre in network_data:
+            network_data[genre]['count'] += 1
+        else:
+            network_data[genre] = {'count': 1, 'dates': dict()}
+        game_year = str(
+            datetime.strptime(game.release_date, '%Y-%m-%d').date().year)
+        if game_year in network_data[genre]['dates']:
+            network_data[genre]['dates'][game_year]['count'] += 1
+        else:
+            network_data[genre]['dates'][game_year] = \
+                {'count': 1, 'tags': dict()}
+        for tag in game.steamspy_tags.split(';'):
+            if tag in network_data[genre]['dates'][game_year]['tags']:
+                network_data[genre]['dates'][game_year]['tags'][tag] += 1
+            else:
+                network_data[genre]['dates'][game_year]['tags'][tag] = 1
+with open('results/network.json', 'w') as file:
+    json.dump(network_data, file)
