@@ -12,13 +12,21 @@ def get_ratings_proportion(row):
             'negative': round(negative_ratings * 100 / total_ratings, 1)}
 
 
+# Obtain mid point for owners
+def get_owner_amount(owners_range):
+    min_owners, max_owners = owners_range.split('-')
+    delta = int(round((int(max_owners) - int(min_owners)) / 2, 0))
+    return int(min_owners) + delta
+
+
 # Games data
 data = pd.read_csv(
     'steam.csv', usecols=['appid', 'name', 'release_date', 'developer',
                           'publisher', 'platforms', 'genres', 'steamspy_tags',
                           'positive_ratings', 'negative_ratings',
-                          'price'])
+                          'price', 'owners'])
 data['price'] = data['price'].apply(lambda x: round(x * 1.34, 2))
+data['owners'] = data['owners'].apply(lambda x: get_owner_amount(x))
 data['positive'] = data.apply(
     lambda row: get_ratings_proportion(row)['positive'], axis=1)
 data['negative'] = data.apply(
@@ -40,7 +48,6 @@ data = pd.merge(data, media_data, on='steam_appid')
 requirements_data = pd.read_csv(
     'steam_requirements_data.csv', usecols=['steam_appid', 'minimum'])
 data = pd.merge(data, requirements_data, on='steam_appid')
-
 data.to_csv('results/steam.csv', index=False)
 
 # Network data
