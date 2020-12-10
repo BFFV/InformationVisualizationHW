@@ -44,6 +44,7 @@ button {
 
 .container {
   display: flex;
+  flex-direction: row;
 }
 
 #network {
@@ -52,6 +53,10 @@ button {
 
 #graphContainer {
   background-color: #212F3D;
+}
+
+#info {
+  width: 40%;
 }
 
 /* H3 (delete later)*/
@@ -83,8 +88,4 @@ button {
 
 #svg-graph {
   background-color: #f4f6f7;
-}
-
-#info {
-  width: 50%;
 }

@@ -251,7 +251,7 @@ function fillNode(node) {
   if (level == 3) {
     if (selectedData.includes(node.steam_appid)) {
       return '#8E44AD';
-    }
+    } //*******************change to many reviews for extremely good & horrible
     if (node.positive >= 95) {
       return '#3498DB'; // Extremely Good #3498DB
     } else if (node.positive >= 80) {
@@ -318,14 +318,43 @@ function back() {
   }
 }
 
-// Show popup with details about the games
-function showPopUp(game) {
-  return;
+// Show details about a node
+function showData(node, graph) {
+  let currentNode = null;
+  const {level} = networkState;
+  if (level == 3) {
+    currentNode = graph
+      .selectAll('circle')
+      .filter((d) => d.steam_appid == node.steam_appid)
+  } else {
+    currentNode = graph
+      .selectAll('circle')
+      .filter((d) => d.name == node.name)
+  }
+  // Increase Size + opacity
+  currentNode.attr('opacity', 0.6);
+  d3.select('#headerImage').attr('src', node.header_image);
+  console.log(node)
+  // Show on secondary view
 }
 
-// Hide popup with details about the games
-function hidePopUp(game) {
-  return;
+// Hide details
+function hideData(node, graph) {
+  let currentNode = null;
+  const {level} = networkState;
+  if (level == 3) {
+    currentNode = graph
+      .selectAll('circle')
+      .filter((d) => d.steam_appid == node.steam_appid)
+  } else {
+    currentNode = graph
+      .selectAll('circle')
+      .filter((d) => d.name == node.name)
+  }
+  // Normal size + opacity
+  currentNode.attr('opacity', 1);
+  d3.select('#headerImage').attr('src', '');
+  // Remove from secondary view
 }
 
 // Generate steam games network
@@ -435,8 +464,8 @@ function updateNetwork() {
           .remove()
       )
     .on('click', (_, d) => selected(d, container))
-    .on('mouseenter', (_, d) => showPopUp(d))
-    .on('mouseleave', (_, d) => hidePopUp(d))
+    .on('mouseenter', (_, d) => showData(d, container))
+    .on('mouseleave', (_, d) => hideData(d, container))
 
   // Simulation
   const simulation = d3
@@ -458,9 +487,11 @@ function updateNetwork() {
 }
 
 // Info View*********
-const info = (census) => {
-  const info = d3.select('#info');
-
+function info() {
+  const info = d3.select('#info')
+    .append('img')
+    .attr('id', 'headerImage')
+  /*
   // Bar Graph
   const svg = info
     .append('svg')
@@ -519,6 +550,7 @@ const info = (census) => {
 
   // Create Bar Graph
   updateGraph(selectedData, census);
+  */
 }
 
 // Load data
@@ -543,6 +575,7 @@ const initialize = async () => {
 // Initialize visualization
 initialize().then(() => {
   gameNetwork(networkSize.height, networkSize.width);
+  info();
   // Search View
   // Comparison View
   // Recommendation View
