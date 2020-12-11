@@ -44,11 +44,11 @@ button {
 
 .container {
   display: flex;
-  flex-direction: row;
 }
 
 #network {
-  width: 60%;
+  width: 50%;
+  padding-right: 1%;
 }
 
 #graphContainer {
@@ -56,36 +56,64 @@ button {
 }
 
 #info {
-  width: 40%;
-}
-
-/* H3 (delete later)*/
-#names {
-  display: flex;
-}
-
-#names p {
-  margin-top: 0px;
   width: 50%;
+  background-color: #212F3D;
+  border: solid 2px;
+  padding: 20px;
+  padding-top: 0%;
 }
 
-#c-text {
-  text-align: right;
-  margin-right: 20px;
+#info h3 {
+  margin-top: 0%;
 }
 
-#c-name {
+#images {
+  display: flex;
+  height: 40%;
+}
+
+#headerImage {
+  width: 60%;
+  height: 90%;
+  border: 1px solid;
+  border-top: none;
+}
+
+#positive {
+  display: block;
+  width: 20%;
+  color: #3498DB;
+}
+
+#positiveImg {
+  width: 70%;
+  height: 40%;
+}
+
+#negative {
+  display: block;
+  width: 20%;
+  color: #E74C3C;
+}
+
+#negativeImg {
+  width: 70%;
+  height: 40%;
+}
+
+#infoContainer {
+  display: flex;
   text-align: left;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
-#map {
-  width: 100%;
+#leftInfo {
+  margin-right: 1%;
+  width: 49%;
 }
 
-#geo-map {
-  background-color: #f4f6f7;
-}
-
-#svg-graph {
-  background-color: #f4f6f7;
+#rightInfo {
+  margin-left: 1%;
+  width: 49%;
 }

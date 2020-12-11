@@ -2,8 +2,10 @@
 const network = d3.select('#network');
 const networkSize = {
   width: Math.floor(parseInt(network.style('width'), 10)),
-  height: Math.floor(parseInt(network.style('width'), 10) / 2)};
+  height: Math.floor(parseInt(network.style('width'), 10) * 0.9)};
 network.style('height', `${networkSize.height}px`);
+const info = d3.select('#info');
+info.style('height', `${networkSize.height * 1.1}px`);
 const radius = {min: Math.floor(networkSize.height * 0.05),
   max: Math.floor(networkSize.height * 0.2)};
 const networkState = {level: 0, genre: '', year: '', tag: ''};
@@ -14,6 +16,7 @@ let tree = {};
 let popularity = {min: 0, max: 0};
 let countValues = {min: 0, max: 0};
 let zoom = null;
+let headerImage = 'images/categories.png';
 
 // Updates the network graph levels
 function updateTree() {
@@ -281,13 +284,17 @@ function selected(node, graph) {
   if (lvl < 3) {
     if (!lvl) {
       networkState.genre = node.name;
+      headerImage = 'images/categories.png'; // years
     } else if (lvl == 1) {
       networkState.year = node.name;
+      headerImage = 'images/categories.png'; // tags
     } else {
       networkState.tag = node.name;
+      headerImage = 'images/categories.png'; // games
     }
     networkState.level ++;
-    return updateNetwork();
+    updateNetwork();
+    updateInfo(node, false);
   }
   // Select games
   const selectedNode = graph
@@ -308,13 +315,17 @@ function back() {
   if (level) {
     if (level == 1) {
       networkState.genre = '';
+      headerImage = 'images/categories.png'; // categories
     } else if (level == 2) {
       networkState.year = '';
+      headerImage = 'images/categories.png'; // years
     } else {
       networkState.tag = '';
+      headerImage = 'images/categories.png'; // tags
     }
     networkState.level --;
-    return updateNetwork();
+    updateNetwork();
+    updateInfo(null, false);
   }
 }
 
@@ -333,9 +344,7 @@ function showData(node, graph) {
   }
   // Increase Size + opacity
   currentNode.attr('opacity', 0.6);
-  d3.select('#headerImage').attr('src', node.header_image);
-  console.log(node)
-  // Show on secondary view
+  updateInfo(node, true);
 }
 
 // Hide details
@@ -353,8 +362,7 @@ function hideData(node, graph) {
   }
   // Normal size + opacity
   currentNode.attr('opacity', 1);
-  d3.select('#headerImage').attr('src', '');
-  // Remove from secondary view
+  updateInfo(node, false);
 }
 
 // Generate steam games network
@@ -402,6 +410,8 @@ function gameNetwork(height, width) {
       networkState.year = '';
       networkState.tag = '';
       updateNetwork();
+      headerImage = 'images/categories.png';
+      updateInfo(null, false);
     })
   buttons.append('button')
     .text('Back to Previous Level')
@@ -413,27 +423,6 @@ function gameNetwork(height, width) {
 
 // Update steam games network
 function updateNetwork() {
-  /*
-  // Highlight Communes
-  const highlight = (id) => {
-    const selected_commune = communes
-      .selectAll('path')
-      .filter((d) => d.properties.id == id)
-    selected_commune.attr('opacity', 0.6);
-    const cName = census.find((c) => c.ID == id).NOM_COMUNA;
-    name.text(`${cName}`);
-  }
-
-  // Stop Highlight
-  const stopHighlight = (id) => {
-    const selected_commune = communes
-      .selectAll('path')
-      .filter((d) => d.properties.id == id)
-    selected_commune.attr('opacity', 1);
-    name.text('');
-  }
-  */
-
   // Reset Zoom/Panning
   const svg = d3.select('#graphContainer');
   const initialState = d3.zoomIdentity.translate(330, 174).scale(0.2);
@@ -486,71 +475,101 @@ function updateNetwork() {
     .attr('stroke-width', 3)
 }
 
-// Info View*********
-function info() {
-  const info = d3.select('#info')
-    .append('img')
+// Detailed info about node
+function infoView() {
+  const images = info.append('div').attr('id', 'images');
+  images.append('div').attr('id', 'positive');
+  const image = images.append('img')
+  image
+    .attr('src', headerImage)
     .attr('id', 'headerImage')
-  /*
-  // Bar Graph
-  const svg = info
-    .append('svg')
-      .attr('width', 620)
-      .attr('height', 700)
-      .attr('id', 'svg-graph')
-  svg.append('rect')
-    .attr('width', '100%')
-    .attr('fill', 'none')
-    .attr('stroke', 'black')
-    .attr('stroke-width', 3)
-  svg.append('g')
-    .attr('transform', 'translate(50, 20)')
-    .attr('id', 'graph')
+    .on('error', () => image.attr('src', headerImage))
+  images.append('div').attr('id', 'negative');
+  updateInfo(null, false);
+}
 
-  // Current Commune
-  svg.append('text')
-    .text('Comuna Actual:')
-    .attr('class', 'sub-title')
-    .attr('x', 80)
-    .attr('y', 580)
-    .attr('id', 'current-commune')
+// Update information about node
+function updateInfo(node, show) {
+  const {level} = networkState;
+  // Hide details
+  if (!show) {
+    info.selectAll('p').remove();
+    info.selectAll('h3').remove();
+    info.selectAll('h2').remove();
+    info.select('#infoContainer').remove();
+    info.select('#positiveImg').remove();
+    info.select('#negativeImg').remove();
+    if (!level) {
+      info.append('h2').text('All Genres');
+      info.append('h3').text('Explore All Game Genres');
+    } else if (level == 1) {
+      info.append('h2').text('Genre: ' + networkState.genre);
+      info.append('h3').text(`Explore ${networkState.genre} Games`);
+    } else if (level == 2) {
+      info.append('h2').text('Year: ' + networkState.year);
+      info.append('h3').text(`Explore ${networkState.genre} Games Released in ${networkState.year}`);
+    } else {
+      info.append('h2').text('Tag: ' + networkState.tag);
+      info.append('h3').text(`Explore ${networkState.genre} Games Released in ${networkState.year} with the Tag ${networkState.tag}`);
+    }
+    return info.select('#headerImage').attr('src', headerImage);
+  }
+  // Show details
+  info.selectAll('h3').remove();
+  info.selectAll('h2').remove();
+  let img = '';
+  if (!level) {
+    img = 'images/categories.png';
+  } else if (level == 1) {
+    img = 'images/categories.png';
+  } else if (level == 2) {
+    img = 'images/categories.png';
+  } else {
+    img = node.header_image;
+  }
+  // Update image
+  info.select('#headerImage').attr('src', img);
 
-  // Legend
-  const legend = svg
-    .append('g')
-    .attr('transform', 'translate(100, 600)')
-  legend
-    .append('text')
-      .text('Hombres')
-      .attr('x', 50)
-      .attr('y', 45)
-      .attr('class', 'sub-title')
-  legend
-    .append('rect')
-      .attr('x', 140)
-      .attr('y', 20)
-      .attr('width', 50)
-      .attr('height', 40)
-      .attr('fill', 'red')
-      .attr('stroke', 'black')
-  legend
-    .append('text')
-      .text('Mujeres')
-      .attr('x', 270)
-      .attr('y', 45)
-      .attr('class', 'sub-title')
-  legend
-    .append('rect')
-      .attr('x', 350)
-      .attr('y', 20)
-      .attr('width', 50)
-      .attr('height', 40)
-      .attr('fill', 'blue')
-      .attr('stroke', 'black')
-
-  // Create Bar Graph
-  updateGraph(selectedData, census);
-  */
+  // Update information
+  if (level == 3) {
+    info.append('h2').text(node.name);
+    const positive = info.select('#positive');
+    positive.append('p');
+    positive.append('img')
+      .attr('src', 'images/like.png')
+      .attr('id', 'positiveImg')
+    positive.append('h3').text(node.positive + '%');
+    const negative = info.select('#negative');
+    negative.append('p');
+    negative.append('img')
+      .attr('src', 'images/dislike.png')
+      .attr('id', 'negativeImg')
+    negative.append('h3').text(node.negative + '%');
+    const infoContainer = info.append('div').attr('id', 'infoContainer');
+    const left = infoContainer.append('div').attr('id', 'leftInfo');
+    const right = infoContainer.append('div').attr('id', 'rightInfo');;
+    left.append('p').text('Developer: ' + node.developer.replaceAll(';', ', '));
+    left.append('p').text('Publisher: ' + node.publisher.replaceAll(';', ', '));
+    left.append('p').text('Release Date: ' + node.release_date);
+    left.append('p').text('Platforms: ' + node.platforms.replaceAll(';', ', '));
+    right.append('p').text('Genres: ' + node.genres.replaceAll(';', ', '));
+    right.append('p').text('Tags: ' + node.steamspy_tags.replaceAll(';', ', '));
+    right.append('p').text('Price: US$ ' + node.price);
+    right.append('p').text('Owners ~ ' + node.owners);
+    info.append('p').text(node.short_description).style('text-align', 'justify');
+  } else {
+    if (!level) {
+      info.append('h2').text('Genre: ' + node.name);
+      info.append('h3').text(`Explore ${node.name} Games`);
+    } else if (level == 1) {
+      info.append('h2').text('Year: ' + node.name);
+      info.append('h3').text(`Explore ${networkState.genre} Games Released in ${node.name}`);
+    } else {
+      info.append('h2').text('Tag: ' + node.name);
+      info.append('h3').text(`Explore ${networkState.genre} Games Released in ${networkState.year} with the Tag ${node.name}`);
+    }
+    info.append('h3').text('(Contains ' + node.count + ' Games)');
+  }
 }
 
 // Load data
@@ -575,7 +594,7 @@ const initialize = async () => {
 // Initialize visualization
 initialize().then(() => {
   gameNetwork(networkSize.height, networkSize.width);
-  info();
+  infoView();
   // Search View
   // Comparison View
   // Recommendation View
