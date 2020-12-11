@@ -1,4 +1,4 @@
-// Definitions & Settings
+// Definitions & settings
 const network = d3.select('#network');
 const networkSize = {
   width: Math.floor(parseInt(network.style('width'), 10)),
@@ -6,9 +6,9 @@ const networkSize = {
 network.style('height', `${networkSize.height}px`);
 const info = d3.select('#info');
 info.style('height', `${networkSize.height * 1.1}px`);
-const radius = {min: Math.floor(networkSize.height * 0.08),
-  max: Math.floor(networkSize.height)};
-const initialState = d3.zoomIdentity.translate(400, 360).scale(0.04);
+const radius = {min: Math.floor(networkSize.height * 0.01),
+  max: Math.floor(networkSize.height) / 4};
+const initialState = d3.zoomIdentity.translate(245, 220).scale(0.46);
 const networkState = {level: 0, genre: '', year: '', tag: ''};
 const selectedData = [];
 let games = [];
@@ -19,20 +19,20 @@ let countValues = {min: 0, max: 0};
 let zoom = null;
 let headerImage = 'images/categories.png';
 
-// Color Scale
+// Color scales
 let logCount = null;
 const fillScaleGenres = d3
-.scaleSequential()
-.domain([0, 1])
-.interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
+  .scaleSequential()
+  .domain([0, 1])
+  .interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
 const fillScaleDates = d3
-.scaleSequential()
-.domain([0, 1])
-.interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
+  .scaleSequential()
+  .domain([0, 1])
+  .interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
 const fillScaleTags = d3
-.scaleSequential()
-.domain([0, 1])
-.interpolator(d3.interpolateBlues)
+  .scaleSequential()
+  .domain([0, 1])
+  .interpolator(d3.interpolateBlues)
 
 // Updates the network graph levels
 function updateTree() {
@@ -41,7 +41,7 @@ function updateTree() {
     for (let year in tree[genre].dates) {
       tree[genre].dates[year].count = 0;
       for (let tag in tree[genre].dates[year].tags) {
-        tree[genre].dates[year].tags[tag] = 0;
+        tree[genre].dates[year].tags[tag].count = 0;
       }
     }
   }
@@ -51,7 +51,7 @@ function updateTree() {
       const gameYear = game.release_date.slice(0, 4);
       tree[genre].dates[gameYear].count ++;
       for (let tag of game.steamspy_tags.split(';')) {
-        tree[genre].dates[gameYear].tags[tag] ++;
+        tree[genre].dates[gameYear].tags[tag].count ++;
       }
     }
   }
@@ -63,15 +63,15 @@ function getLevelData() {
   let levelData = [];
   if (!level) {
     for (let g in tree) {
-      levelData.push({name: g, count: tree[g].count});
+      levelData.push({id: tree[g].id, name: g, count: tree[g].count});
     }
   } else if (level == 1) {
     for (let d in tree[genre].dates) {
-      levelData.push({name: d, count: tree[genre].dates[d].count});
+      levelData.push({id: tree[genre].dates[d].id, name: d, count: tree[genre].dates[d].count});
     }
   } else if (level == 2) {
     for (let t in tree[genre].dates[year].tags) {
-      levelData.push({name: t, count: tree[genre].dates[year].tags[t]});
+      levelData.push({id: tree[genre].dates[year].tags[t].id, name: t, count: tree[genre].dates[year].tags[t].count});
     }
   } else {
     levelData = currentGames.filter((game) => {
@@ -80,143 +80,6 @@ function getLevelData() {
         (game.steamspy_tags.split(';').includes(tag))});
   }
   return levelData;
-}
-
-// Create/Update Bar Graph*************
-function updateGraph(selectedData, censusData) {
-  // Census data
-  const data = censusData
-    .filter((c) => selectedData.includes(c.ID))
-    .sort((a, b) => selectedData.indexOf(a.ID) - selectedData.indexOf(b.ID))
-    .map((object) => {
-      const {ID, HOMBRES, MUJERES, NOM_COMUNA} = object;
-      return {ID, HOMBRES, MUJERES, NOM_COMUNA};
-    });
-  const stack = d3
-    .stack()
-    .keys(['HOMBRES', 'MUJERES'])
-  const series = stack(data);
-  const maxValue = d3.max(series, (s) => d3.max(s, (array) => array[1]));
-
-  // Dimensions
-  const width = 560;
-  const height = 400;
-
-  // Scales
-  const scaleX = d3.scaleBand()
-    .domain(data.map((d) => d.NOM_COMUNA))
-    .rangeRound([0, width])
-    .padding(0.3)
-  const scaleY = d3.scaleLinear()
-    .domain([0, maxValue])
-    .range([height, 0])
-  const scaleColor = d3.scaleOrdinal()
-    .domain(series.keys())
-    .range(['red', 'blue'])
-
-  // Create/Update graph
-  const graph = d3.select('#graph');
-  graph
-    .selectAll('g')
-    .data(series)
-    .join('g')
-      .attr('fill', (d) => scaleColor(d.key))
-      .selectAll('rect')
-      .data((d) => d, (d) => d.data.NOM_COMUNA)
-      .join((enter) =>
-        enter
-          .append('rect')
-          .attr('class', (d) => d.data.NOM_COMUNA.replace(/\s+/g, ''))
-          .attr('x', (d) => scaleX(d.data.NOM_COMUNA))
-          .attr('width', scaleX.bandwidth())
-          .attr('y', height)
-          .attr('height', 0)
-          .transition()
-          .duration(800)
-          .attr('y', (d) => scaleY(d[1]))
-          .attr('height', (d) => scaleY(d[0]) - scaleY(d[1]))
-          .selection(),
-        (update) =>
-        update
-          .transition()
-          .duration(800)
-          .attr('x', (d) => scaleX(d.data.NOM_COMUNA))
-          .attr('width', scaleX.bandwidth())
-          .attr('y', (d) => scaleY(d[1]))
-          .attr('height', (d) => scaleY(d[0]) - scaleY(d[1]))
-          .selection(),
-        (exit) =>
-        exit
-          .transition()
-          .duration(500)
-          .attr('y', height)
-          .attr('height', 0)
-          .remove()
-      )
-      .on('mouseenter', (_, d) => {
-        const total = parseInt(d.data.HOMBRES, 10) + parseInt(d.data.MUJERES, 10);
-        let amount = 0;
-        let detailType = '';
-        let color = '';
-        if (!d[0]) {
-          amount = parseInt(d.data.HOMBRES);
-          detailType = 'Hombres';
-          color = '#F35C5C';
-        } else {
-          amount = parseInt(d.data.MUJERES);
-          detailType = 'Mujeres';
-          color = '#3F77E8';
-        }
-        const proportion = Math.round(100 * ((amount * 100) / total)) / 100;
-        let offset = scaleX.bandwidth() + 10;
-        if (scaleX(d.data.NOM_COMUNA) > (width / 2)) {
-          offset = - 130;
-        }
-        const details = graph.append('g')
-          .attr('transform', `translate(${scaleX(d.data.NOM_COMUNA) + offset}, ${scaleY(d[1]) - 15})`)
-          .attr('class', 'detail')
-        details.append('rect')
-          .attr('width', 120)
-          .attr('height', 120)
-          .attr('rx', 20)
-          .attr('fill', color)
-          .attr('stroke', 'black')
-          .attr('opacity', 0.9)
-        details.append('text').text(detailType).attr('x', 25).attr('y', 30).attr('class', 'label');
-        details.append('text').text(`Total: ${amount}`).attr('x', 10).attr('y', 60).attr('class', 'label');
-        details.append('text').text(`${proportion}%`).attr('x', 30).attr('y', 95).attr('class', 'big-label');
-        graph.selectAll(`.${d.data.NOM_COMUNA.replace(/\s+/g, '')}`).attr('opacity', 0.8);
-        d3.select('#current-commune').text(`Comuna Actual: ${d.data.NOM_COMUNA}`);
-      })
-      .on('mouseleave', (_, d) => {
-        graph.selectAll('.detail').remove();
-        d3.select('#current-commune').text(`Comuna Actual:`);
-        graph.selectAll(`.${d.data.NOM_COMUNA.replace(/\s+/g, '')}`).attr('opacity', 1);
-      })
-
-  // Axis
-  const axisX = d3.axisBottom(scaleX);
-  if (data.length > 60) {
-    axisX.tickValues([]);
-  }
-  const axisY = d3.axisLeft(scaleY);
-  graph
-    .append('g')
-      .attr('transform', `translate(0, ${height})`)
-    .call(axisX)
-    .selectAll('text')
-      .attr('y', -4)
-      .attr('x', 9)
-      .attr('transform', 'rotate(90)')
-      .style('text-anchor', 'start')
-  graph
-    .append('g')
-      .attr('transform', `translate(0, 0)`)
-    .call(axisY)
-    .selectAll('line')
-      .attr('x1', width)
-      .attr('opacity', 0.1)
-      .attr('pointer-events', 'none')
 }
 
 // Scale nodes to popularity size
@@ -228,7 +91,7 @@ function scaleNode(node) {
   if (level == 3) {
     maxValue = popularity.max;
     minValue = popularity.min;
-    nodeCount = node.owners;
+    nodeCount = parseInt(node.owners, 10);
   } else {
     maxValue = countValues.max;
     minValue = countValues.min;
@@ -236,15 +99,16 @@ function scaleNode(node) {
   }
   // Size Scale
   const sizeScale = (popularity) => {
+    const adjust = 5;
     const logPopularity = d3.scaleLog()
-      .domain([minValue, maxValue]);
+      .domain([adjust * minValue, adjust * maxValue]);
     const linearSize = d3.scaleLinear()
       .domain([0, 1])
       .range([radius.min, radius.max])
     if (popularity < 1) {
-      return linearSize(logPopularity(1));
+      return linearSize(logPopularity(adjust * 1));
     }
-    return linearSize(logPopularity(popularity));
+    return linearSize(logPopularity(adjust * popularity));
   }
   return sizeScale(nodeCount);
 }
@@ -255,8 +119,8 @@ function fillNode(node) {
   if (level == 3) {
     if (selectedData.includes(node.steam_appid)) {
       return '#8E44AD';
-    } //*******************change to many reviews for extremely good & horrible
-    if (node.positive >= 95) {
+    }
+    if ((node.positive >= 95) && (node.ratings >= 500)) {
       return '#3498DB'; // Extremely Good #3498DB
     } else if (node.positive >= 80) {
       return '#48C9B0'; // Great #48C9B0
@@ -264,9 +128,9 @@ function fillNode(node) {
       return '#27AE60'; // Good #27AE60
     } else if (node.positive >= 50) {
       return '#F4D03F'; // Average #F4D03F
-    } else if (node.positive >= 30) {
+    } else if ((node.positive >= 30) || (node.ratings < 20)) {
       return '#E67E22'; // Bad #E67E22
-    } else if (node.positive >= 15) {
+    } else if ((node.positive >= 15) || (node.ratings < 50)) {
       return '#E74C3C'; // Really Bad #E74C3C
     }
     return '#641E16'; // Horrible #641E16
@@ -341,7 +205,7 @@ function showData(node, graph) {
   } else {
     currentNode = graph
       .selectAll('circle')
-      .filter((d) => d.name == node.name)
+      .filter((d) => d.id == node.id)
   }
   // Increase Size + opacity
   currentNode.attr('opacity', 0.6);
@@ -359,7 +223,7 @@ function hideData(node, graph) {
   } else {
     currentNode = graph
       .selectAll('circle')
-      .filter((d) => d.name == node.name)
+      .filter((d) => d.id == node.id)
   }
   // Normal size + opacity
   currentNode.attr('opacity', 1);
@@ -390,13 +254,11 @@ function gameNetwork(height, width) {
       [0, 0],
       [width, height]
     ])
-    /*
     .translateExtent([
-      [- width * 6, - height * 10],
-      [width * 7, height * 10]
+      [- width * 10, - height * 10],
+      [width * 10, height * 10]
     ])
-    .scaleExtent([0.0001, 2])
-    */
+    .scaleExtent([0.03, 3])
     .on('zoom', (e) => container.attr('transform', e.transform))
   svg.call(zoom);
   svg.on('dblclick.zoom', null);
@@ -439,7 +301,7 @@ function updateNetwork() {
     .selectAll('circle')
     .data(nodeData, (d) => {
       if (networkState.level < 3) {
-        return `${d.name}${networkState.level}`;
+        return d.id;
       }
       return d.steam_appid;
     })
@@ -465,8 +327,9 @@ function updateNetwork() {
   // Simulation
   const simulation = d3
     .forceSimulation(nodeData)
-    .force('charge', d3.forceManyBody().strength(-250))
-    .force('collision', d3.forceCollide((d) => 1.5 * scaleNode(d)))
+    .force('charge', d3.forceManyBody().strength(-5))
+    .force('collision', d3.forceCollide((d) => 1.1 * scaleNode(d)))
+    .force('center', d3.forceCenter(networkSize.width / 2, networkSize.height / 2))
   simulation.on('tick', (a) => {
     node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
   })
@@ -484,7 +347,7 @@ function updateNetwork() {
 function infoView() {
   const images = info.append('div').attr('id', 'images');
   images.append('div').attr('id', 'positive');
-  const image = images.append('img')
+  const image = images.append('img');
   image
     .attr('src', headerImage)
     .attr('id', 'headerImage')
@@ -552,7 +415,7 @@ function updateInfo(node, show) {
     negative.append('h3').text(node.negative + '%');
     const infoContainer = info.append('div').attr('id', 'infoContainer');
     const left = infoContainer.append('div').attr('id', 'leftInfo');
-    const right = infoContainer.append('div').attr('id', 'rightInfo');;
+    const right = infoContainer.append('div').attr('id', 'rightInfo');
     left.append('p').text('Developer: ' + node.developer.replaceAll(';', ', '));
     left.append('p').text('Publisher: ' + node.publisher.replaceAll(';', ', '));
     left.append('p').text('Release Date: ' + node.release_date);
@@ -581,11 +444,11 @@ function updateInfo(node, show) {
 const initialize = async () => {
   /* Columns: name, release_date, developer, publisher, platforms,
     genres, steamspy_tags, price, positive, negative, steam_appid, short_description,
-    header_image, minimum, owners */
+    header_image, ratings, owners */
   games = await d3.csv('../data/steam.csv');
   currentGames = games.slice();
-  popularity.max = Math.max(...games.map(g => g.owners));
-  popularity.min = Math.min(...games.map(g => g.owners));
+  popularity.max = Math.max(...games.map(g => parseInt(g.owners, 10)));
+  popularity.min = Math.min(...games.map(g => parseInt(g.owners, 10)));
   /* Levels: genres -> dates -> tags -> games */
   tree = await d3.json('../data/network.json');
   const genreValues = [];
@@ -593,7 +456,7 @@ const initialize = async () => {
     genreValues.push(tree[genre].count);
   }
   countValues.max = Math.max(...genreValues.map(g => g));
-  countValues.min = Math.min(...genreValues.map(g => g));
+  countValues.min = 1;
   logCount = d3.scaleLog().domain([countValues.min, countValues.max]);
 }
 
