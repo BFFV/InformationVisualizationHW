@@ -6,8 +6,9 @@ const networkSize = {
 network.style('height', `${networkSize.height}px`);
 const info = d3.select('#info');
 info.style('height', `${networkSize.height * 1.1}px`);
-const radius = {min: Math.floor(networkSize.height * 0.05),
-  max: Math.floor(networkSize.height * 0.2)};
+const radius = {min: Math.floor(networkSize.height * 0.08),
+  max: Math.floor(networkSize.height)};
+const initialState = d3.zoomIdentity.translate(400, 360).scale(0.04);
 const networkState = {level: 0, genre: '', year: '', tag: ''};
 const selectedData = [];
 let games = [];
@@ -17,6 +18,21 @@ let popularity = {min: 0, max: 0};
 let countValues = {min: 0, max: 0};
 let zoom = null;
 let headerImage = 'images/categories.png';
+
+// Color Scale
+let logCount = null;
+const fillScaleGenres = d3
+.scaleSequential()
+.domain([0, 1])
+.interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
+const fillScaleDates = d3
+.scaleSequential()
+.domain([0, 1])
+.interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
+const fillScaleTags = d3
+.scaleSequential()
+.domain([0, 1])
+.interpolator(d3.interpolateBlues)
 
 // Updates the network graph levels
 function updateTree() {
@@ -235,21 +251,6 @@ function scaleNode(node) {
 
 // Fill nodes with color based on rating / size
 function fillNode(node) {
-  // Color Scale
-  const logCount = d3.scaleLog()
-    .domain([countValues.min, countValues.max])
-  const fillScaleGenres = d3
-    .scaleSequential()
-    .domain([0, 1])
-    .interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
-  const fillScaleDates = d3
-    .scaleSequential()
-    .domain([0, 1])
-    .interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
-  const fillScaleTags = d3
-    .scaleSequential()
-    .domain([0, 1])
-    .interpolator(d3.interpolateBlues)
   const level = networkState.level;
   if (level == 3) {
     if (selectedData.includes(node.steam_appid)) {
@@ -284,13 +285,13 @@ function selected(node, graph) {
   if (lvl < 3) {
     if (!lvl) {
       networkState.genre = node.name;
-      headerImage = 'images/categories.png'; // years
+      headerImage = 'images/category.png';
     } else if (lvl == 1) {
       networkState.year = node.name;
-      headerImage = 'images/categories.png'; // tags
+      headerImage = 'images/calendar.png';
     } else {
       networkState.tag = node.name;
-      headerImage = 'images/categories.png'; // games
+      headerImage = 'images/tag.png';
     }
     networkState.level ++;
     updateNetwork();
@@ -315,13 +316,13 @@ function back() {
   if (level) {
     if (level == 1) {
       networkState.genre = '';
-      headerImage = 'images/categories.png'; // categories
+      headerImage = 'images/categories.png';
     } else if (level == 2) {
       networkState.year = '';
-      headerImage = 'images/categories.png'; // years
+      headerImage = 'images/category.png';
     } else {
       networkState.tag = '';
-      headerImage = 'images/categories.png'; // tags
+      headerImage = 'images/calendar.png';
     }
     networkState.level --;
     updateNetwork();
@@ -389,15 +390,16 @@ function gameNetwork(height, width) {
       [0, 0],
       [width, height]
     ])
+    /*
     .translateExtent([
       [- width * 6, - height * 10],
       [width * 7, height * 10]
     ])
-    .scaleExtent([0.03, 2])
+    .scaleExtent([0.0001, 2])
+    */
     .on('zoom', (e) => container.attr('transform', e.transform))
   svg.call(zoom);
   svg.on('dblclick.zoom', null);
-  const initialState = d3.zoomIdentity.translate(330, 174).scale(0.2);
   svg.call(zoom.transform, initialState);
 
   // Shortcuts
@@ -425,10 +427,9 @@ function gameNetwork(height, width) {
 function updateNetwork() {
   // Reset Zoom/Panning
   const svg = d3.select('#graphContainer');
-  const initialState = d3.zoomIdentity.translate(330, 174).scale(0.2);
   svg
     .transition()
-    .duration(1000)
+    .duration(500)
     .call(zoom.transform, initialState)
 
   // Nodes DataJoin
@@ -436,7 +437,12 @@ function updateNetwork() {
   const nodeData = getLevelData();
   const node = container
     .selectAll('circle')
-    .data(nodeData, (d) => d.name)
+    .data(nodeData, (d) => {
+      if (networkState.level < 3) {
+        return `${d.name}${networkState.level}`;
+      }
+      return d.steam_appid;
+    })
     .join((enter) =>
         enter
           .append('circle')
@@ -459,9 +465,8 @@ function updateNetwork() {
   // Simulation
   const simulation = d3
     .forceSimulation(nodeData)
-    //.force('charge', d3.forceManyBody().strength(5))
-    .force('collision', d3.forceCollide((d) => 2 * scaleNode(d)))
-    .force('center', d3.forceCenter(networkSize.width / 2, networkSize.height / 2))
+    .force('charge', d3.forceManyBody().strength(-250))
+    .force('collision', d3.forceCollide((d) => 1.5 * scaleNode(d)))
   simulation.on('tick', (a) => {
     node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
   })
@@ -483,7 +488,7 @@ function infoView() {
   image
     .attr('src', headerImage)
     .attr('id', 'headerImage')
-    .on('error', () => image.attr('src', headerImage))
+    .on('error', () => image.attr('src', 'images/game.png'))
   images.append('div').attr('id', 'negative');
   updateInfo(null, false);
 }
@@ -519,11 +524,11 @@ function updateInfo(node, show) {
   info.selectAll('h2').remove();
   let img = '';
   if (!level) {
-    img = 'images/categories.png';
+    img = 'images/category.png';
   } else if (level == 1) {
-    img = 'images/categories.png';
+    img = 'images/calendar.png';
   } else if (level == 2) {
-    img = 'images/categories.png';
+    img = 'images/tag.png';
   } else {
     img = node.header_image;
   }
@@ -589,6 +594,7 @@ const initialize = async () => {
   }
   countValues.max = Math.max(...genreValues.map(g => g));
   countValues.min = Math.min(...genreValues.map(g => g));
+  logCount = d3.scaleLog().domain([countValues.min, countValues.max]);
 }
 
 // Initialize visualization
