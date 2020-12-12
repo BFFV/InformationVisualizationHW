@@ -76,6 +76,7 @@ button {
   border: solid 2px;
   padding: 20px;
   padding-top: 0%;
+  overflow: auto;
 }
 
 #info h3 {
@@ -148,7 +149,7 @@ button {
 #searchContainer {
   display: block;
   height: 12%;
-  min-height: 130px;
+  min-height: 180px;
 }
 
 #searchContainer p {
@@ -195,6 +196,15 @@ button {
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.summary h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.summary p {
+  margin: 4px;
 }
 
 .locateImage {
