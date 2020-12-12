@@ -31,6 +31,7 @@
       </div>
       <div class="description">
         <h2>Segundo Nivel: Abstracción de Datos y Tareas</h2>
+        <h2>Abstracción de Tareas</h2>
         <div class="task">
           <h3>Tarea 1: </h3><h3 class="highlight">EXPLORAR</h3><h3> las </h3><h3 class="highlight">CARACTERÍSTICAS</h3>
           <h3> del catálogo de juegos a nivel general</h3>
@@ -95,6 +96,130 @@
             'platforms', 'genres', 'steamspy_tags', 'price', 'positive', 'negative', 'short_description', 'header_image' y 'owners' (información detallada de un juego).
           </p>
         </div>
+        <h2>Abstracción de Datos</h2>
+        <h2>Datasets</h2>
+          <ul>
+            <li>El dataset de los juegos ('steam.csv') es de tipo tabla, ya que está organizado en filas (los juegos en sí) y columnas (los atributos de los juegos).</li>
+            <li>El dataset de la jerarquía ('network.json') es de tipo red, ya que modela un árbol que agrupa en categorías a los juegos.</li>
+            <li>Ambos dataset son estáticos, ya que se considera siempre la información hasta el año 2019, sin actualizarlo durante su uso.</li>
+            <li>Hay 3 tipos de datos singulares presentes: atributos (las columnas del dataset de juegos y los datos 'name' y 'count' del dataset jerárquico), ítems
+               (las entidades de los juegos y de sus agrupaciones) y enlaces (relación padre-hijo entre los nodos del dataset jerárquico).</li>
+            <li>En el dataset de juegos, la llave corresponde al atributo 'steam_appid', que representa el identificador único de un juego de Steam.</li>
+            <li>En el dataset jerárquico, la llave corresponde al atributo 'id', que representa el identificador único de un nodo en el árbol.</li>
+          </ul>
+        <h2>Atributos</h2>
+        <h3>name</h3>
+          <ul>
+            <li>Categórico, ya que los nombres no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>count</h3>
+          <ul>
+            <li>Ordenado, ya que toma valores numéricos enteros que poseen un orden.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia de cantidad de juegos exacta entre distintos nodos de agrupaciones.</li>
+            <li>Secuencial, ya que la cantidad toma siempre valores positivos.</li>
+            <li>No Cíclico, ya que la cantidad puede aumentar indefinidamente.</li>
+          </ul>
+        <h3>release_date</h3>
+          <ul>
+            <li>Ordenado, ya que las fechas se pueden ordenar en el tiempo.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia de tiempo exacta entre 2 fechas.</li>
+            <li>Secuencial, ya que la fecha está siempre acotada por los días, meses y años, que son positivos.</li>
+            <li>No Cíclico, ya que las fechas pueden aumentar indefinidamente hasta llegar al año 2019.</li>
+          </ul>
+        <h3>developer</h3>
+          <ul>
+            <li>Categórico, ya que los desarrolladores no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>publisher</h3>
+          <ul>
+            <li>Categórico, ya que los editores no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>platforms</h3>
+          <ul>
+            <li>Categórico, ya que los nombres de plataformas no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>genres</h3>
+          <ul>
+            <li>Categórico, ya que los nombres de géneros no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>steamspy_tags</h3>
+          <ul>
+            <li>Categórico, ya que los nombres de etiquetas no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>price</h3>
+          <ul>
+            <li>Ordenado, ya que el precio toma valores numéricos que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre el precio de juegos.</li>
+            <li>Secuencial, ya que el precio siempre toma valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que el precio puede aumentar de forma indefinida.</li>
+          </ul>
+        <h3>positive</h3>
+          <ul>
+            <li>Ordenado, ya que el rating positivo toma valores numéricos que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre el rating positivo de juegos.</li>
+            <li>Secuencial, ya que el rating positivo siempre toma valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que el rating positivo puede aumentar de forma indefinida hasta llegar a 100.</li>
+          </ul>
+        <h3>negative</h3>
+          <ul>
+            <li>Ordenado, ya que el rating negativo toma valores numéricos que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre el rating negativo de juegos.</li>
+            <li>Secuencial, ya que el rating negativo siempre toma valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que el rating negativo puede aumentar de forma indefinida hasta llegar a 100.</li>
+          </ul>
+        <h3>steam_appid</h3>
+          <ul>
+            <li>Ordenado, ya que toma valores numéricos únicos que poseen un orden.</li>
+            <li>Ordinal, ya que los identificadores no representan ninguna diferencia exacta entre las entidades asociadas.</li>
+            <li>Secuencial, ya que los identificadores toman siempre valores positivos.</li>
+            <li>No Cíclico, ya que los identificadores puede aumentar indefinidamente.</li>
+          </ul>
+        <h3>short_description</h3>
+          <ul>
+            <li>Categórico, ya que las descripciones no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>header_image</h3>
+          <ul>
+            <li>Categórico, ya que las imágenes no tienen un orden intrínseco.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+            <li>No Aplica, ya que no es un atributo ordenado.</li>
+          </ul>
+        <h3>ratings</h3>
+          <ul>
+            <li>Ordenado, ya que la cantidad de ratings toma valores numéricos que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre la cantidad de ratings de juegos.</li>
+            <li>Secuencial, ya que la cantidad de ratings siempre toma valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que la cantidad de ratings puede aumentar de forma indefinida.</li>
+          </ul>
+        <h3>owners</h3>
+          <ul>
+            <li>Ordenado, ya que la cantidad de dueños toma valores numéricos que poseen un orden intrínseco.</li>
+            <li>Cuantitativo, ya que se puede obtener la diferencia exacta entre la cantidad de dueños de juegos.</li>
+            <li>Secuencial, ya que la cantidad de dueños siempre toma valores mayores (o iguales) a 0.</li>
+            <li>No Cíclico, ya que la cantidad de dueños puede aumentar de forma indefinida.</li>
+          </ul>
       </div>
       <div class="description">
         <h2>Tercer Nivel: Codificación Visual y de Interacción</h2>
