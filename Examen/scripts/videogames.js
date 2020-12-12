@@ -213,7 +213,8 @@ function showData(node, graph) {
       .filter((d) => d.id == node.id)
   }
   // Increase Size + opacity
-  currentNode.attr('opacity', 0.6);
+  currentNode.attr('opacity', 0.8);
+  currentNode.attr('r', scaleNode(node) * 1.2);
   updateInfo(node, false);
   updateInfo(node, true);
 }
@@ -233,6 +234,7 @@ function hideData(node, graph) {
   }
   // Normal size + opacity
   currentNode.attr('opacity', 1);
+  currentNode.attr('r', scaleNode(node));
   updateInfo(node, false);
 }
 
@@ -469,7 +471,9 @@ function searchView() {
   const searchContainer = search.append('div')
     .attr('id', 'searchContainer')
   searchContainer.append('h2').text('Game Search');
-  searchContainer.append('p').text('(Click the search icon to locate a game in the main graph)');
+  searchContainer.append('p').text(
+    'Search games by their name. You can click the search icon afterwards to locate the game in the main graph above.')
+    .attr('class', 'description');
   const searchBar = searchContainer.append('input')
     .attr('type', 'text')
     .attr('maxlength', '128')
@@ -512,7 +516,11 @@ function updateSearch(results) {
       .attr('src', game.header_image)
       .attr('class', 'resultImage')
       .on('error', () => resultImg.attr('src', 'images/game.png'))
-    result.append('h3').text(game.name);
+    const summary = result.append('div').attr('class', 'summary');
+    summary.append('h3').text(game.name);
+    summary.append('p').text('Genres: ' + game.genres.replaceAll(';', ', '));
+    summary.append('p').text('Release Year: ' + game.release_date.slice(0, 4));
+    summary.append('p').text('Tags: ' + game.steamspy_tags.replaceAll(';', ', '));
     result.append('img')
       .attr('src', 'images/locate.png')
       .attr('class', 'locateImage')
@@ -523,7 +531,9 @@ function updateSearch(results) {
 // List view
 function listView() {
   list.append('h2').text('My Game List');
-  list.append('p').text('(Your selected games will appear in this list)');
+  list.append('p').text(
+    'Your selected games will appear in this list. You can display their info or remove them by clicking on the small icons.')
+    .attr('class', 'description');
   list.append('div').attr('id', 'selectedGames');
 }
 
@@ -554,7 +564,7 @@ function updateList() {
   const getGame = (id) => currentGames.filter((g) => g.steam_appid == id)[0];
   const selectedList = list.select('#selectedGames');
   selectedList
-    .selectAll('div')
+    .selectAll('.selectedGame')
     .data(selectedData, (d) => d)
     .join((enter) => {
         const obj = enter.append('div').attr('class', 'selectedGame');
@@ -562,7 +572,11 @@ function updateList() {
           .attr('src', (d) => getGame(d).header_image)
           .attr('class', 'selectedImage')
           .on('error', () => selectedImg.attr('src', 'images/game.png'))
-        obj.append('h3').text((d) => getGame(d).name);
+        const summary = obj.append('div').attr('class', 'summary');
+        summary.append('h3').text((d) => getGame(d).name);
+        summary.append('p').text((d) => 'Genres: ' + getGame(d).genres.replaceAll(';', ', '));
+        summary.append('p').text((d) => 'Release Year: ' + getGame(d).release_date.slice(0, 4));
+        summary.append('p').text((d) => 'Tags: ' + getGame(d).steamspy_tags.replaceAll(';', ', '));
         obj.append('img')
           .attr('src', 'images/info.png')
           .attr('class', 'infoImage')
