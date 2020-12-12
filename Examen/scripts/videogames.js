@@ -385,11 +385,11 @@ function updateNetwork() {
   const legendHeight = parseInt(legend.style('height'), 10);
   legend.select('#axisGroup').remove();
   legend.selectAll('.tick').remove();
-  legend.selectAll('.domain').remove();
   legend.append('g')
     .attr('transform', `translate(0, ${legendHeight})`)
     .attr('id', 'axisGroup')
     .call(axis)
+  legend.selectAll('.domain').remove();
 }
 
 // Detailed info about node

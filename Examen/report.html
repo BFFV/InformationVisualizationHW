@@ -223,10 +223,146 @@
       </div>
       <div class="description">
         <h2>Tercer Nivel: Codificación Visual y de Interacción</h2>
-        <p>A</p>
-        <ul>
-          <li>A</li>
-        </ul>
+        <p>La herramienta se dividió en 4 secciones, las que serán descritas en detalle a continuación, junto a sus tareas asociadas:</p>
+        <h2>1) Visualización Jerárquica del Catálogo de Juegos</h2>
+          <h3>Tareas Asociadas</h3>
+            <ul>
+              <li>Tarea 1: Explorar las características del catálogo de juegos a nivel general</li>
+              <li>Tarea 2: Localizar el valor individual de algún juego en el catálogo, dado que se conoce información sobre este de antemano</li>
+              <li>Tarea 4: Descubrir la similaridad entre juegos conocidos y desconocidos para el usuario</li>
+              <li>Tarea 5: Comparar las características de juegos distintos</li>
+              <li>Tarea 6: Disfrutar las características del catálogo de juegos</li>
+            </ul>
+          <h3>Marcas</h3>
+          <p>Corresponden a círculos que representan los nodos del árbol jerárquico. Dentro de los primeros 3 niveles de la jerarquía, estos nodos
+             corresponden a agrupaciones de juegos según género (1er nivel), año de publicación (2do nivel) y etiquetas (3er nivel). En el último nivel de la jerarquía,
+              estos corresponden a cada juego individual que está contenido en ese nodo hoja del árbol.</p>
+          <h3>Canales</h3>
+            <ul>
+              <li>Área: Codifica la popularidad de un nodo en específico. Para los nodos de agrupaciones utiliza su atributo 'count', que indica la cantidad de
+                 juegos que contiene. Para los nodos de juegos utiliza el atributo 'owners', que indica la cantidad estimada de personas que tienen ese juego.</li>
+              <li>Matiz y Saturación del Color: Para el caso de los nodos de agrupaciones, codifica la cantidad de juegos que contiene (mientras más juegos, más saturado).
+                 Para el caso de los nodos de juegos, codifica su calidad basada en el rating que reciben (desde burdeo para juegos horribles hasta azul para juegos excelentes).</li>
+            </ul>
+          <h3>Idioms Visuales</h3>
+          <p>Se utilizó un árbol jerárquico que agrupa a los juegos según género, año de publicación y etiquetas. Este árbol es representado utilizando un
+             Bubble Chart Empaquetado, donde al presionar sobre uno de los nodos se avanza al siguiente nivel de la jerarquía a través de esa rama específica. La
+              posición de cada nodo no codifica nada en especial, ya que es simulada mediante fuerzas.</p>
+          <h3>Idioms de Interacción</h3>
+            <ul>
+              <li>Zoom: Utilizando la rueda del mouse se puede acercar o alejar la vista.</li>
+              <li>Panning: Arrastrando con el click del mouse se puede trasladar la vista, permitiendo navegar entre los nodos.</li>
+              <li>Ver Detalles: Al posicionar el mouse sobre un nodo, este aumenta su área ligeramente y disminuye su opacidad, de forma que el usuario se pueda dar
+                 cuenta del enfoque sobre ese nodo en específico. Esta acción se comunica con la vista de información que será explicada en su sección respectiva.</li>
+              <li>Avanzar Nivel: Al hacer click sobre un nodo de agrupación, se avanzará al siguiente nivel del árbol a través de la rama correspondiente a ese nodo.</li>
+              <li>Retroceder Nivel: Al hacer click derecho sobre cualquier parte del idiom, se retrocederá al nivel anterior del árbol a través de la rama correspondiente al padre.</li>
+              <li>Seleccionar Nodo: Al hacer click sobre un nodo de juegos este cambiará su color a morado, dando cuenta de que está actualmente seleccionado. Esta acción se
+                 comunica con la lista de juegos que será explicada en su sección respectiva.</li>
+              <li>Atajos: Existen 2 botones, el primero ('Back to Start') se encarga de devolver el árbol a su raíz, mientras que el segundo ('Back to Previous Level')
+                 realiza lo mismo que el click derecho (retroceder 1 nivel).</li>
+            </ul>
+          <h3>Decisiones de Diseño</h3>
+            <ul>
+              <li>El tamaño horizontal de la vista se fijó en la mitad del ancho disponible en la pantalla, de forma de que se pueda aprovechar mejor la vista de información que
+                 se encuentra al lado.</li>
+              <li>Se utiliza una leyenda estándar para dar a entender los colores de cada nodo. Para los nodos de agrupación las escalas son de azules (1er nivel),
+                 verdes (2do nivel) y rojos (3er nivel). Para los nodos de juegos, la escala utilizada va desde el burdeo hasta el azul, colores que muestran de forma
+                  intuitiva la calidad de un elemento.</li>
+              <li>Al comienzo de la página se encuentran las instrucciones generales de uso del idiom.</li>
+            </ul>
+        <h2>2) Vista de Información</h2>
+        <h3>Tareas Asociadas</h3>
+          <ul>
+            <li>Tarea 3: Identificar las características de cada juego o agrupación dentro del catálogo</li>
+            <li>Tarea 6: Disfrutar las características del catálogo de juegos</li>
+          </ul>
+        <h3>Marcas</h3>
+          <ul>
+            <li>Cuadro de Imagen Central: Contiene una imagen asociada al nodo.</li>
+            <li>Like: Muestra el rating positivo de un juego.</li>
+            <li>Dislike: Muestra el rating negativo de un juego.</li>
+            <li>Textos: Indican la información detallada del nodo.</li>
+          </ul>
+        <h3>Canales</h3>
+          <ul>
+            <li>Contenido de la Imagen Central: Representa al contenido asociado a ese nodo (por ejemplo la imagen representativa del juego).</li>
+            <li>Colores del Texto: Para los likes es azul (da a entender positividad), para los dislikes es rojo (da a entender negatividad),
+               para el resto es un color mezcla entre blanco y azul, que permite un buen contraste con el fondo.</li>
+          </ul>
+        <h3>Idioms Visuales</h3>
+        <p>Se utilizó una vista estándar que contiene textos e imágenes de apoyo.</p>
+        <h3>Idioms de Interacción</h3>
+        <p>No hay idioms de interacción en esta sección.</p>
+        <h3>Decisiones de Diseño</h3>
+          <ul>
+            <li>El tamaño vertical de esta vista se dejó un poco mayor al de la sección de la jerarquía, para tratar de evitar que en resoluciones menores se corte el texto que no cabe.</li>
+            <li>Las imágenes de juegos se cargan desde urls externas, por lo que se recomienda fuertemente estar conectado a internet para que se puedan aprovechar. En otro caso, se utilizan imágenes placeholder locales.</li>
+          </ul>
+        <h2>3) Sistema de Búsqueda</h2>
+        <h3>Tareas Asociadas</h3>
+          <ul>
+            <li>Tarea 2: Localizar el valor individual de algún juego en el catálogo, dado que se conoce información sobre este de antemano</li>
+            <li>Tarea 6: Disfrutar las características del catálogo de juegos</li>
+          </ul>
+        <h3>Marcas</h3>
+          <ul>
+            <li>Cuadro de Imagen: Contiene una imagen asociada al juego.</li>
+            <li>Textos: Indican la información detallada del juego.</li>
+          </ul>
+        <h3>Canales</h3>
+          <ul>
+            <li>Contenido de la Imagen: Imagen representativa del juego.</li>
+          </ul>
+        <h3>Idioms Visuales</h3>
+        <p>Se utilizó una vista de búsqueda que contiene lo siguiente:</p>
+          <ul>
+            <li>Barra de Búsqueda: Permite buscar juegos por nombre.</li>
+            <li>Sección de Resultados: Muestra los resultados obtenidos, por cada juego entrega su imagen, nombre, géneros, año y etiquetas.</li>
+            <li>Ícono de Lupa: Da a entender que se puede usar para localizar juegos en la visualización jerárquica.</li>
+          </ul>
+        <h3>Idioms de Interacción</h3>
+          <ul>
+            <li>Buscar Juegos: Al escribir en la barra se realizan búsquedas dinámicas en tiempo real, acorde a lo escrito.</li>
+            <li>Resultados: Se muestran de forma dinámica en la parte inferior de esta vista.</li>
+            <li>Localizar Juegos: Al presionar el ícono de la lupa en alguno de los resultados, se procede a mostrar el nodo hoja en el que está dicho juego dentro de
+               la visualización jerárquica. Además, este nodo será marcado con color morado en su borde, de forma que sea fácil de encontrar visualmente.</li>
+          </ul>
+        <h3>Decisiones de Diseño</h3>
+          <ul>
+            <li>Las imágenes de juegos se cargan desde urls externas, por lo que se recomienda fuertemente estar conectado a internet para que se puedan aprovechar. En otro caso, se utilizan imágenes placeholder locales.</li>
+          </ul>
+        <h2>4) Lista de Juegos Seleccionados</h2>
+        <h3>Tareas Asociadas</h3>
+          <ul>
+            <li>Tarea 4: Descubrir la similaridad entre juegos conocidos y desconocidos para el usuario</li>
+            <li>Tarea 5: Comparar las características de juegos distintos</li>
+            <li>Tarea 6: Disfrutar las características del catálogo de juegos</li>
+          </ul>
+        <h3>Marcas</h3>
+          <ul>
+            <li>Cuadro de Imagen: Contiene una imagen asociada al juego.</li>
+            <li>Textos: Indican la información detallada del juego.</li>
+          </ul>
+        <h3>Canales</h3>
+          <ul>
+            <li>Contenido de la Imagen: Imagen representativa del juego.</li>
+          </ul>
+        <h3>Idioms Visuales</h3>
+        <p>Se utilizó una lista de juegos, donde cada uno contiene lo siguiente:</p>
+          <ul>
+            <li>Datos Resumidos: Imagen, nombre, géneros, año y etiquetas del juego.</li>
+            <li>Ícono de Información: Da a entender que se puede usar para ver la información detallada de cada juego.</li>
+            <li>Ícono de Cruz: Da a entender que se puede usar para remover juegos de la lista.</li>
+          </ul>
+        <h3>Idioms de Interacción</h3>
+          <ul>
+            <li>Ver Detalles: Al presionar el ícono de información en algún juego, se procede a desplegar su información detallada en la vista de información explicada anteriormente.</li>
+            <li>Eliminar Juegos de la Lista: Al presionar el ícono de cruz en algún juego, se procede a removerlo de la lista.</li>
+          </ul>
+        <h3>Decisiones de Diseño</h3>
+          <ul>
+            <li>Las imágenes de juegos se cargan desde urls externas, por lo que se recomienda fuertemente estar conectado a internet para que se puedan aprovechar. En otro caso, se utilizan imágenes placeholder locales.</li>
+          </ul>
       </div>
     </div>
   </body>
