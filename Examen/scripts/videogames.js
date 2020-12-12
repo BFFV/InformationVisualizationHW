@@ -8,6 +8,8 @@ const info = d3.select('#info');
 info.style('height', `${networkSize.height * 1.1}px`);
 const search = d3.select('#search');
 search.style('height', `${networkSize.height * 0.8}px`);
+const list = d3.select('#list');
+list.style('height', `${networkSize.height * 0.8}px`);
 const radius = {min: Math.floor(networkSize.height * 0.01),
   max: Math.floor(networkSize.height) / 4};
 const initialState = d3.zoomIdentity.translate(245, 220).scale(0.46);
@@ -161,7 +163,7 @@ function selected(node, graph) {
     }
     networkState.level ++;
     updateNetwork();
-    updateInfo(node, false);
+    return updateInfo(node, false);
   }
   // Select games
   const selectedNode = graph
@@ -174,6 +176,7 @@ function selected(node, graph) {
     selectedData.push(node.steam_appid);
   }
   selectedNode.attr('fill', (d) => fillNode(d));
+  updateList();
 }
 
 // Go back to the previous state
@@ -211,6 +214,7 @@ function showData(node, graph) {
   }
   // Increase Size + opacity
   currentNode.attr('opacity', 0.6);
+  updateInfo(node, false);
   updateInfo(node, true);
 }
 
@@ -317,6 +321,8 @@ function updateNetwork() {
           .selection(),
         (update) =>
         update
+          .attr('stroke', '#1F1F1F')
+          .attr('stroke-width', 0.1)
           .selection(),
         (exit) =>
         exit
@@ -462,7 +468,8 @@ function searchGames(name) {
 function searchView() {
   const searchContainer = search.append('div')
     .attr('id', 'searchContainer')
-  searchContainer.append('h2').text('Search for Games')
+  searchContainer.append('h2').text('Game Search');
+  searchContainer.append('p').text('(Click the search icon to locate a game in the main graph)');
   const searchBar = searchContainer.append('input')
     .attr('type', 'text')
     .attr('maxlength', '128')
@@ -471,18 +478,108 @@ function searchView() {
   search.append('div').attr('id', 'searchResults');
 }
 
+// Locate games
+function locateGames(game) {
+  const {genres, release_date, steamspy_tags} = game;
+  const genre = genres.split(';')[0];
+  const year = release_date.slice(0, 4);
+  const tag = steamspy_tags.split(';')[0];
+  networkState.genre = genre;
+  networkState.year = year;
+  networkState.tag = tag;
+  headerImage = 'images/tag.png';
+  networkState.level = 3;
+  updateNetwork();
+  updateInfo(game, false);
+  updateInfo(game, true);
+  const selectedNode = d3.select('#nodeContainer')
+    .selectAll('circle')
+    .filter((d) => d.steam_appid == game.steam_appid)
+  const nodeRadius = selectedNode.attr('r');
+  selectedNode
+    .attr('stroke', 'purple')
+    .attr('stroke-width', nodeRadius / 4)
+    .attr('stroke-dasharray', `${nodeRadius / 2},${nodeRadius / 2}`)
+}
+
 // Search results
 function updateSearch(results) {
   const resultsView = search.select('#searchResults');
   resultsView.selectAll('div').remove();
-  for (game of results) {
+  for (let game of results) {
     const result = resultsView.append('div').attr('class', 'searchResult');
     const resultImg = result.append('img')
       .attr('src', game.header_image)
       .attr('class', 'resultImage')
       .on('error', () => resultImg.attr('src', 'images/game.png'))
     result.append('h3').text(game.name);
+    result.append('img')
+      .attr('src', 'images/locate.png')
+      .attr('class', 'locateImage')
+      .on('click', () => locateGames(game))
   }
+}
+
+// List view
+function listView() {
+  list.append('h2').text('My Game List');
+  list.append('p').text('(Your selected games will appear in this list)');
+  list.append('div').attr('id', 'selectedGames');
+}
+
+// Show game info
+function gameInfo(game) {
+  updateInfo(game, false);
+  const currentLevel = networkState.level;
+  networkState.level = 3;
+  updateInfo(game, true);
+  networkState.level = currentLevel;
+}
+
+// Remove game from list
+function removeGame(game) {
+  const index = selectedData.indexOf(game.steam_appid);
+  selectedData.splice(index, 1);
+  const selectedNode = network.select('#nodeContainer')
+    .selectAll('circle')
+    .filter((d) => d.steam_appid == game.steam_appid)
+  if (selectedNode) {
+    selectedNode.attr('fill', (d) => fillNode(d));
+  }
+  updateList();
+}
+
+// Selected games on list
+function updateList() {
+  const getGame = (id) => currentGames.filter((g) => g.steam_appid == id)[0];
+  const selectedList = list.select('#selectedGames');
+  selectedList
+    .selectAll('div')
+    .data(selectedData, (d) => d)
+    .join((enter) => {
+        const obj = enter.append('div').attr('class', 'selectedGame');
+        const selectedImg = obj.append('img')
+          .attr('src', (d) => getGame(d).header_image)
+          .attr('class', 'selectedImage')
+          .on('error', () => selectedImg.attr('src', 'images/game.png'))
+        obj.append('h3').text((d) => getGame(d).name);
+        obj.append('img')
+          .attr('src', 'images/info.png')
+          .attr('class', 'infoImage')
+          .on('click', (_, d) => gameInfo(getGame(d)))
+        obj.append('img')
+          .attr('src', 'images/delete.png')
+          .attr('class', 'removeImage')
+          .on('click', (_, d) => removeGame(getGame(d)))
+        return obj.selection();
+        },
+        (update) =>
+        update
+          .selection(),
+        (exit) =>
+        exit
+          .remove()
+      )
 }
 
 // Load data
@@ -510,6 +607,5 @@ initialize().then(() => {
   gameNetwork(networkSize.height, networkSize.width);
   infoView();
   searchView();
-  // Comparison View
-  // Recommendation View
+  listView();
 })
