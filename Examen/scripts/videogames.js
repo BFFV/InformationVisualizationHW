@@ -16,7 +16,6 @@ const initialState = d3.zoomIdentity.translate(245, 220).scale(0.4);
 const networkState = {level: 0, genre: '', year: '', tag: ''};
 const selectedData = [];
 let games = [];
-let currentGames = [];
 let tree = {};
 let popularity = {min: 0, max: 0};
 let countValues = {min: 0, max: 0};
@@ -39,29 +38,6 @@ const fillScaleTags = d3
   .domain([0, 1])
   .interpolator(d3.interpolateReds)
 
-// Updates the network graph levels
-function updateTree() {
-  for (let genre in tree) {
-    tree[genre].count = 0;
-    for (let year in tree[genre].dates) {
-      tree[genre].dates[year].count = 0;
-      for (let tag in tree[genre].dates[year].tags) {
-        tree[genre].dates[year].tags[tag].count = 0;
-      }
-    }
-  }
-  for (let game of currentGames) {
-    for (let genre of game.genres.split(';')) {
-      tree[genre].count ++;
-      const gameYear = game.release_date.slice(0, 4);
-      tree[genre].dates[gameYear].count ++;
-      for (let tag of game.steamspy_tags.split(';')) {
-        tree[genre].dates[gameYear].tags[tag].count ++;
-      }
-    }
-  }
-}
-
 // Get current data for network graph
 function getLevelData() {
   const {level, genre, year, tag} = networkState;
@@ -79,7 +55,7 @@ function getLevelData() {
       levelData.push({id: tree[genre].dates[year].tags[t].id, name: t, count: tree[genre].dates[year].tags[t].count});
     }
   } else {
-    levelData = currentGames.filter((game) => {
+    levelData = games.filter((game) => {
       return (game.genres.split(';').includes(genre)) &&
        (game.release_date.slice(0, 4) == year) &&
         (game.steamspy_tags.split(';').includes(tag))});
@@ -147,7 +123,7 @@ function fillNode(node) {
   return fillScaleGenres(logCount(node.count));
 }
 
-// Select nodes / Go deeper
+// Select nodes / go deeper
 function selected(node, graph) {
   const lvl = networkState.level;
   // Go deeper in the tree
@@ -213,7 +189,6 @@ function showData(node, graph) {
       .selectAll('circle')
       .filter((d) => d.id == node.id)
   }
-  // Increase Size + opacity
   currentNode.attr('opacity', 0.8);
   currentNode.attr('r', scaleNode(node) * 1.2);
   updateInfo(node, false);
@@ -233,7 +208,6 @@ function hideData(node, graph) {
       .selectAll('circle')
       .filter((d) => d.id == node.id)
   }
-  // Normal size + opacity
   currentNode.attr('opacity', 1);
   currentNode.attr('r', scaleNode(node));
   updateInfo(node, false);
@@ -257,7 +231,7 @@ function gameNetwork(height, width) {
     .append('g')
     .attr('id', 'nodeContainer')
 
-  // Zoom/Panning
+  // Zoom / Panning
   zoom = d3.zoom()
     .extent([
       [0, 0],
@@ -305,7 +279,7 @@ function gameNetwork(height, width) {
   // Shortcuts
   const buttons = network.append('div').attr('class', 'button-set');
   buttons.append('button')
-    .text('Back to Root')
+    .text('Back to Start')
     .on('click', () => {
       networkState.level = 0;
       networkState.genre = '';
@@ -325,7 +299,7 @@ function gameNetwork(height, width) {
 
 // Update steam games network
 function updateNetwork() {
-  // Reset Zoom/Panning
+  // Reset Zoom / Panning
   const svg = d3.select('#graphContainer');
   svg
     .transition()
@@ -519,10 +493,10 @@ function updateInfo(node, show) {
 function searchGames(name) {
   let results = [];
   if (name) {
-    const direct = currentGames.filter(
+    const direct = games.filter(
       (g) => g.name.toLowerCase().slice(0, name.length) == name.toLowerCase()).sort(
       (g, h) => g.ratings - h.ratings).reverse();
-    const indirect = currentGames.filter(
+    const indirect = games.filter(
       (g) => g.name.toLowerCase().includes(name.toLowerCase())).sort(
       (g, h) => g.ratings - h.ratings).reverse();
     results = direct.concat(indirect);
@@ -626,7 +600,7 @@ function removeGame(game) {
 
 // Selected games on list
 function updateList() {
-  const getGame = (id) => currentGames.filter((g) => g.steam_appid == id)[0];
+  const getGame = (id) => games.filter((g) => g.steam_appid == id)[0];
   const selectedList = list.select('#selectedGames');
   selectedList
     .selectAll('.selectedGame')
@@ -667,7 +641,6 @@ const initialize = async () => {
     genres, steamspy_tags, price, positive, negative, steam_appid, short_description,
     header_image, ratings, owners */
   games = await d3.csv('../data/steam.csv');
-  currentGames = games.slice();
   popularity.max = Math.max(...games.map(g => parseInt(g.owners, 10)));
   popularity.min = Math.min(...games.map(g => parseInt(g.owners, 10)));
   /* Levels: genres -> dates -> tags -> games */

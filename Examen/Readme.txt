@@ -5,3 +5,4 @@ Consideraciones:
   página deja de ser RESPONSIVE.
 - Por todo esto, se recomienda probarla en pantallas de alta resolución para maximizar su usabilidad.
 - El archivo 'index.html' contiene la herramienta de visualización, mientras que el archivo 'report.html' corresponde al informe.
+- Para que la herramienta funcione correctamente bajo la política CORS, se debe levantar mediante un servidor html.

@@ -13,105 +13,86 @@
         <h2>Primer Nivel: Caracterización de Dominio</h2>
         <p>Hoy en día, la industria de los videojuegos ha crecido enormemente, resultando en uno de los hobbies más comunes en el mundo. El catálogo más diverso
            actualmente corresponde al de los juegos de computador, surgiendo así una comunidad inmensa de personas apasionadas por este gran arte. Estas personas
-            corresponden al usuario objetivo de este trabajo, el que busca entregar funcionalidades de utilidad para realizar consultas sobre el catálogo de la
+            corresponden al usuario objetivo de este trabajo, el que busca entregar funcionalidades de utilidad para realizar consultas y explorar el catálogo de la
              plataforma/tienda más popular en la actualidad, conocida como Steam. Para realizar esto se decidió utilizar un conjunto de datasets que contienen
-              información sobre los videojuegos de Steam, aplicando una fase de preprocesamiento para unificarlos en un sólo dataset de interés.</p>
+              información sobre los videojuegos de Steam, aplicando una fase de preprocesamiento para unificarlos en un sólo dataset de interés. Además, se generó otro
+               dataset que modela la jerarquía del catálogo de juegos, agrupados por género, año de publicación y etiquetas.</p>
         <h4>Consideraciones:</h4>
         <ul>
           <li>Los datasets originales se pueden encontrar en el siguiente link: https://www.kaggle.com/nikdavis/steam-store-games.</li>
-          <li>El dataset unificado es el que se encuentra en la carpeta 'data' entregada, y es el utilizado por la herramienta de visualización.</li>
+          <li>El dataset unificado es el archivo 'steam.csv' que se encuentra en la carpeta 'data' entregada, y es el utilizado por la herramienta de visualización.</li>
+          <li>El dataset que contiene la información de la jerarquía es el archivo 'network.json' que se encuentra en la carpeta 'data' entregada, y también es utilizado por la herramienta de visualización.</li>
           <li>Para realizar el preprocesamiento se utilizó la librería pandas de python (con python 3.8), uniendo los datos relevantes de todos los videojuegos en un sólo dataset mediante
              joins entre los datasets originales. El script utilizado se encuentra adjunto ('process.py').</li>
           <li>La herramienta está hecha en Inglés, buscando apelar a una mayor cantidad de usuarios a nivel global.</li>
-          <li>Para poder aprovechar la herramienta al 100% se recomienda estar conectado a internet (por temas de imágenes customizadas).</li>
+          <li>Para poder apreciar la herramienta al 100% se requiere estar conectado a internet (por temas de imágenes customizadas), y para maximizar la usabilidad se recomienda utilizar un
+             monitor de alta resolución (si es que es posible).</li>
         </ul>
       </div>
       <div class="description">
         <h2>Segundo Nivel: Abstracción de Datos y Tareas</h2>
         <div class="task">
-          <h3>Tarea 1: </h3><h3 class="highlight">EXPLORAR</h3><h3> la </h3><h3 class="highlight">P</h3>
-          <h3> Descubrir nuevos juegos en la red para jugar</h3>
-          <p>A
+          <h3>Tarea 1: </h3><h3 class="highlight">EXPLORAR</h3><h3> las </h3><h3 class="highlight">CARACTERÍSTICAS</h3>
+          <h3> del catálogo de juegos a nivel general</h3>
+          <p>Los usuarios desean visualizar e interactuar con el catálogo de juegos, aprendiendo así sobre la popularidad/rating de cada uno en relación al resto,
+             además de comprender las distintas agrupaciones que se forman según el género, año de publicación y etiquetas de cada juego (todo esto con el fin de hacerse
+              una mejor idea de los juegos que podrían serles de interés). Como se desea interactuar y revisar el catálogo de forma visual, pero sin conocer la ubicación
+               o los elementos en sí de antemano, la acción a realizar es EXPLORAR. No se desea comparar atributos de forma aislada, sino más bien se desea revisar de
+                forma generalizada cómo se ven los distintos grupos y juegos en la herramienta, por lo que se tiene interés en las CARACTERÍSTICAS.
           </p>
-          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
-             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
-              y sobre las divisiones geopolíticas de interés).
-          </p>
-          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
-              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
-          </p>
-        </div>
-        <div class="task">
-          <h3>Tarea 2: </h3><h3 class="highlight">LOCALIZAR</h3><h3> la </h3><h3 class="highlight">P</h3>
-          <h3> Localizar juegos conocidos mediante navegación o search bar</h3>
-          <p>a
-          </p>
-          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
-             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
-              y sobre las divisiones geopolíticas de interés).
-          </p>
-          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
-              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          <p>Los datos necesarios para esta tarea son 'count' (del dataset json, indicando la cantidad de juegos contenidos en un cierto nodo de agrupación), 'positive'
+             y 'owners' (del dataset de juegos, indicando su rating positivo y su popularidad).
           </p>
         </div>
         <div class="task">
-          <h3>Tarea 3: </h3><h3 class="highlight">IDENTIFICAR</h3><h3> la </h3><h3 class="highlight">P</h3>
-          <h3> Ver detalles de cada juego/categoría</h3>
-          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
-            la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
-             Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+          <h3>Tarea 2: </h3><h3 class="highlight">LOCALIZAR</h3><h3> el </h3><h3 class="highlight">VALOR INDIVIDUAL</h3>
+          <h3> de algún juego en el catálogo, dado que se conoce información sobre este de antemano</h3>
+          <p>Los usuarios desean encontrar de forma sencilla los juegos que ya conocen dentro del catálogo, y al no tener información sobre su ubicación, la acción
+             corresponde a LOCALIZAR. Como lo que se quiere es simplemente encontrar una entidad singular (un juego), se busca un VALOR INDIVIDUAL.
           </p>
-          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
-             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
-              y sobre las divisiones geopolíticas de interés).
-          </p>
-          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
-              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          <p>Los datos necesarios para esta tarea son 'name' (permite localizar al juego de forma directa por su nombre), 'genres', 'release_date' y 'steamspy_tags'
+             (permiten localizar al juego conociendo el camino a tomar en la jerarquía).
           </p>
         </div>
         <div class="task">
-          <h3>Tarea 4 (Extra): </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">P</h3>
-          <h3> juegos nuevos que jugar</h3>
-          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
-            la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
-             Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+          <h3>Tarea 3: </h3><h3 class="highlight">IDENTIFICAR</h3><h3> las </h3><h3 class="highlight">CARACTERÍSTICAS</h3>
+          <h3> de cada juego o agrupación dentro del catálogo</h3>
+          <p>Los usuarios desean ver toda la información disponible sobre alguna agrupación o juego dentro del catálogo, por lo tanto desean IDENTIFICAR estos datos de interés.
+             Se quiere conocer en detalle la información disponible de alguna entidad, por lo tanto se buscan sus CARACTERÍSTICAS.
           </p>
-          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
-             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
-              y sobre las divisiones geopolíticas de interés).
-          </p>
-          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
-              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          <p>Los datos necesarios para esta tarea son 'name', 'count' (información detallada de una agrupación), 'name', release_date', 'developer', 'publisher',
+             'platforms', 'genres', 'steamspy_tags', 'price', 'positive', 'negative', 'short_description', 'header_image' y 'owners' (información detallada de un juego).
           </p>
         </div>
         <div class="task">
-          <h3>Tarea 5 (Extra): </h3><h3 class="highlight">Cambiar</h3><h3> la </h3><h3 class="highlight">P</h3>
-          <h3> gg filtro</h3>
-          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
-            la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
-             Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+          <h3>Tarea 4 (Extra): </h3><h3 class="highlight">DESCUBRIR</h3><h3> la </h3><h3 class="highlight">SIMILARIDAD</h3>
+          <h3> entre juegos conocidos y desconocidos para el usuario</h3>
+          <p>Los usuarios desean encontrar juegos de interés que les sean desconocidos, de forma que tengan ideas sobre qué juegos comprar a continuación. Como se desea
+             aprender información desconocida, la acción es DESCUBRIR. Se quiere revisar que tan similares son estos juegos desconocidos con respecto a juegos conocidos
+              (para determinar si son de interés o no), por lo que se busca su SIMILARIDAD.
           </p>
-          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
-             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
-              y sobre las divisiones geopolíticas de interés).
-          </p>
-          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
-              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+          <p>Los datos necesarios para esta tarea son 'name', 'count' (información detallada de una agrupación), 'name', release_date', 'developer', 'publisher',
+            'platforms', 'genres', 'steamspy_tags', 'price', 'positive', 'negative', 'short_description', 'header_image' y 'owners' (información detallada de un juego).
           </p>
         </div>
         <div class="task">
-          <h3>Tarea 6 (Extra): </h3><h3 class="highlight">COMPARAR/REGISTRAR</h3><h3> la </h3><h3 class="highlight">P</h3>
-          <h3> lista de juegos</h3>
-          <p>La historiadora desea ver si existe una relación entre las zonas geográficas y los factores socioeconómicos, por lo tanto se quiere investigar
-            la CORRELACIÓN entre estas variables, considerando que no existe una dependencia directa entre ellas (se espera que sea así, ya que son muchos factores diversos).
-             Dado que esta corresponde a información nueva que se quiere conocer por medio de análisis, la acción a realizar es DESCUBRIR.
+          <h3>Tarea 5 (Extra): </h3><h3 class="highlight">COMPARAR</h3><h3> las </h3><h3 class="highlight">CARACTERÍSTICAS</h3>
+          <h3> de juegos distintos</h3>
+          <p>Los usuarios desean COMPARAR juegos distintos para poder decidir cual les interesa comprar por sobre el otro. Para comparar ambos juegos se
+             requiere mirar sus CARACTERÍSTICAS.
           </p>
-          <p>Los datos necesarios para esta tarea son 'share_white', 'share_black' y 'share_hispanic' (entregan información sobre la etnicidad de la zona), 'p_income', 'county_income',
-             'nat_bucket', 'pov', 'urate' y 'college' (entregan información socioeconómica de la zona), 'city', 'state', 'latitude', 'longitude', 'county_fp' (entregan la información geográfica
-              y sobre las divisiones geopolíticas de interés).
+          <p>Los datos necesarios para esta tarea son 'name', release_date', 'developer', 'publisher', 'platforms', 'genres', 'steamspy_tags', 'price', 'positive',
+             'negative', 'short_description', 'header_image' y 'owners' (información detallada de un juego).
           </p>
-          <p>Los factores criminales de cada zona pueden ser derivados del dataset. Por cada tracto, condado, ciudad y estado se puede obtener el número de muertes 'n_killings', que
-              representa la criminalidad en dicho lugar (es útil saber esto para poder generalizar los factores criminales a nivel de divisiones geopolíticas más amplias, desde los tractos hasta los estados).
+        </div>
+        <div class="task">
+          <h3>Tarea 6 (Extra): </h3><h3 class="highlight">DISFRUTAR</h3><h3> las </h3><h3 class="highlight">CARACTERÍSTICAS</h3>
+          <h3> del catálogo de juegos</h3>
+          <p>Los usuarios desean utilizar la herramienta para satisfacer su curiosidad sobre la variedad de títulos del catálogo, por lo que la acción es DISFRUTAR.
+             Se quieren observar las CARACTERÍSTICAS de cada agrupación y juego.
+          </p>
+          <p>Los datos necesarios para esta tarea son 'name', 'count' (información detallada de una agrupación), 'name', release_date', 'developer', 'publisher',
+            'platforms', 'genres', 'steamspy_tags', 'price', 'positive', 'negative', 'short_description', 'header_image' y 'owners' (información detallada de un juego).
           </p>
         </div>
       </div>
