@@ -12,7 +12,7 @@ const list = d3.select('#list');
 list.style('height', `${networkSize.height * 0.8}px`);
 const radius = {min: Math.floor(networkSize.height * 0.01),
   max: Math.floor(networkSize.height) / 4};
-const initialState = d3.zoomIdentity.translate(245, 220).scale(0.46);
+const initialState = d3.zoomIdentity.translate(245, 220).scale(0.4);
 const networkState = {level: 0, genre: '', year: '', tag: ''};
 const selectedData = [];
 let games = [];
@@ -22,21 +22,22 @@ let popularity = {min: 0, max: 0};
 let countValues = {min: 0, max: 0};
 let zoom = null;
 let headerImage = 'images/categories.png';
+let axis = null;
 
 // Color scales
 let logCount = null;
 const fillScaleGenres = d3
   .scaleSequential()
   .domain([0, 1])
-  .interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
+  .interpolator(d3.interpolateBlues)
 const fillScaleDates = d3
   .scaleSequential()
   .domain([0, 1])
-  .interpolator(d3.interpolateRgb('#F1C40F', '#AF7AC5'))
+  .interpolator(d3.interpolateGreens)
 const fillScaleTags = d3
   .scaleSequential()
   .domain([0, 1])
-  .interpolator(d3.interpolateBlues)
+  .interpolator(d3.interpolateReds)
 
 // Updates the network graph levels
 function updateTree() {
@@ -272,6 +273,35 @@ function gameNetwork(height, width) {
   svg.on('dblclick.zoom', null);
   svg.call(zoom.transform, initialState);
 
+  // Legend
+  const sizeValues = [1, 100, 500, 1000, 3000, 5000, 7861];
+  const scaleX = d3.scaleBand()
+    .domain(sizeValues)
+    .rangeRound([0, width - 10])
+    .padding(0)
+  const legend = network.append('svg')
+    .attr('height', '4%')
+    .attr('width', width - 10)
+    .attr('id', 'legend')
+  const squares = legend.append('g');
+  for (let i = 0; i < 7; i++) {
+    squares
+      .append('rect')
+        .attr('x', scaleX(sizeValues[i]))
+        .attr('y', 0)
+        .attr('width', scaleX.bandwidth())
+        .attr('height', '100%')
+        .attr('fill', fillScaleGenres(logCount(sizeValues[i])))
+        .attr('id', `square${i}`)
+  }
+  axis = d3.axisTop(scaleX);
+  axis.tickValues(sizeValues).tickSize(0);
+  const legendHeight = parseInt(legend.style('height'), 10);
+  legend.append('g')
+    .attr('transform', `translate(0, ${legendHeight})`)
+    .attr('id', 'axisGroup')
+    .call(axis)
+
   // Shortcuts
   const buttons = network.append('div').attr('class', 'button-set');
   buttons.append('button')
@@ -337,7 +367,7 @@ function updateNetwork() {
   // Simulation
   const simulation = d3
     .forceSimulation(nodeData)
-    .force('charge', d3.forceManyBody().strength(-5))
+    .force('charge', d3.forceManyBody().strength(-10))
     .force('collision', d3.forceCollide((d) => 1.1 * scaleNode(d)))
     .force('center', d3.forceCenter(networkSize.width / 2, networkSize.height / 2))
   simulation.on('tick', (a) => {
@@ -351,6 +381,41 @@ function updateNetwork() {
     .attr('fill', 'none')
     .attr('stroke', 'black')
     .attr('stroke-width', 3)
+
+  // Legend
+  const sizeValues = [1, 100, 500, 1000, 3000, 5000, 7861];
+  let axisValues = sizeValues;
+  const gameRatings = ['Horrible', 'Really Bad', 'Bad', 'Average', 'Good', 'Great', 'Amazing'];
+  const gameColors = ['#641E16', '#E74C3C', '#E67E22', '#F4D03F', '#27AE60', '#48C9B0', '#3498DB'];
+  const legend = network.select('#legend');
+  const {level} = networkState;
+  for (let i = 0; i < 7; i++) {
+    const square = legend.select(`#square${i}`);
+    if (!level) {
+      square.attr('fill', fillScaleGenres(logCount(sizeValues[i])));
+    } else if (level == 1) {
+      square.attr('fill', fillScaleDates(logCount(sizeValues[i])));
+    } else if (level == 2) {
+      square.attr('fill', fillScaleTags(logCount(sizeValues[i])));
+    } else {
+      square.attr('fill', gameColors[i]);
+      axisValues = gameRatings;
+    }
+  }
+  const scaleX = d3.scaleBand()
+    .domain(axisValues)
+    .rangeRound([0, networkSize.width - 10])
+    .padding(0)
+  axis = d3.axisTop(scaleX);
+  axis.tickValues(axisValues).tickSize(0);
+  const legendHeight = parseInt(legend.style('height'), 10);
+  legend.select('#axisGroup').remove();
+  legend.selectAll('.tick').remove();
+  legend.selectAll('.domain').remove();
+  legend.append('g')
+    .attr('transform', `translate(0, ${legendHeight})`)
+    .attr('id', 'axisGroup')
+    .call(axis)
 }
 
 // Detailed info about node
@@ -472,7 +537,7 @@ function searchView() {
     .attr('id', 'searchContainer')
   searchContainer.append('h2').text('Game Search');
   searchContainer.append('p').text(
-    'Search games by their name. You can click the search icon afterwards to locate the game in the main graph above.')
+    'Search games by their name. You can click the search icon afterwards to locate the game in the main graph above (look for the purple marked node).')
     .attr('class', 'description');
   const searchBar = searchContainer.append('input')
     .attr('type', 'text')

@@ -24,6 +24,7 @@ h1, h2 {
 }
 
 #header img {
+  height: 100%;
   width: 4%;
   margin-right: 10px;
 }
@@ -43,6 +44,12 @@ button {
   margin: 5px;
   padding: 5px;
   font-weight: bold;
+  color: #c7d5e0;
+  background-color: #212F3D;
+}
+
+.button-set :focus {
+  outline: 0 !important;
 }
 
 .button-set {
@@ -186,6 +193,8 @@ button {
   text-align: left;
   width: 55%;
   display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .locateImage {
