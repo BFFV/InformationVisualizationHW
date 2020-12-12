@@ -6,6 +6,8 @@ const networkSize = {
 network.style('height', `${networkSize.height}px`);
 const info = d3.select('#info');
 info.style('height', `${networkSize.height * 1.1}px`);
+const search = d3.select('#search');
+search.style('height', `${networkSize.height * 0.8}px`);
 const radius = {min: Math.floor(networkSize.height * 0.01),
   max: Math.floor(networkSize.height) / 4};
 const initialState = d3.zoomIdentity.translate(245, 220).scale(0.46);
@@ -440,6 +442,49 @@ function updateInfo(node, show) {
   }
 }
 
+// Search games
+function searchGames(name) {
+  let results = [];
+  if (name) {
+    const direct = currentGames.filter(
+      (g) => g.name.toLowerCase().slice(0, name.length) == name.toLowerCase()).sort(
+      (g, h) => g.ratings - h.ratings).reverse();
+    const indirect = currentGames.filter(
+      (g) => g.name.toLowerCase().includes(name.toLowerCase())).sort(
+      (g, h) => g.ratings - h.ratings).reverse();
+    results = direct.concat(indirect);
+    results = [...new Set([...direct, ...indirect])];
+  }
+  updateSearch(results.slice(0, 10));
+}
+
+// Search bar
+function searchView() {
+  const searchContainer = search.append('div')
+    .attr('id', 'searchContainer')
+  searchContainer.append('h2').text('Search for Games')
+  const searchBar = searchContainer.append('input')
+    .attr('type', 'text')
+    .attr('maxlength', '128')
+    .attr('id', 'searchBar')
+    .on('keyup', () => searchGames(searchBar.property('value')))
+  search.append('div').attr('id', 'searchResults');
+}
+
+// Search results
+function updateSearch(results) {
+  const resultsView = search.select('#searchResults');
+  resultsView.selectAll('div').remove();
+  for (game of results) {
+    const result = resultsView.append('div').attr('class', 'searchResult');
+    const resultImg = result.append('img')
+      .attr('src', game.header_image)
+      .attr('class', 'resultImage')
+      .on('error', () => resultImg.attr('src', 'images/game.png'))
+    result.append('h3').text(game.name);
+  }
+}
+
 // Load data
 const initialize = async () => {
   /* Columns: name, release_date, developer, publisher, platforms,
@@ -464,7 +509,7 @@ const initialize = async () => {
 initialize().then(() => {
   gameNetwork(networkSize.height, networkSize.width);
   infoView();
-  // Search View
+  searchView();
   // Comparison View
   // Recommendation View
 })
