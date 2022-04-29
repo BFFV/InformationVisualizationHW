@@ -1,0 +1,230 @@
+{
+  "nodes": [
+    {
+      "name": "Argentina",
+      "infections": 1329005,
+      "location": "SA"
+    },
+    {
+      "name": "Bolivia",
+      "infections": 143371,
+      "location": "SA"
+    },
+    {
+      "name": "Brazil",
+      "infections": 5911758,
+      "location": "SA"
+    },
+    {
+      "name": "Chile",
+      "infections": 533610,
+      "location": "SA"
+    },
+    {
+      "name": "Colombia",
+      "infections": 1211128,
+      "location": "SA"
+    },
+    {
+      "name": "Ecuador",
+      "infections": 181104,
+      "location": "SA"
+    },
+    {
+      "name": "Paraguay",
+      "infections": 72857,
+      "location": "SA"
+    },
+    {
+      "name": "Peru",
+      "infections": 939931,
+      "location": "SA"
+    },
+    {
+      "name": "Uruguay",
+      "infections": 4208,
+      "location": "SA"
+    },
+    {
+      "name": "Venezuela",
+      "infections": 97739,
+      "location": "SA"
+    },
+    {
+      "name": "Belize",
+      "infections": 4883,
+      "location": "CA"
+    },
+    {
+      "name": "Costa Rica",
+      "infections": 125590,
+      "location": "CA"
+    },
+    {
+      "name": "El Salvador",
+      "infections": 36669,
+      "location": "CA"
+    },
+    {
+      "name": "Guatemala",
+      "infections": 115730,
+      "location": "CA"
+    },
+    {
+      "name": "Honduras",
+      "infections": 103239,
+      "location": "CA"
+    },
+    {
+      "name": "Nicaragua",
+      "infections": 5725,
+      "location": "CA"
+    },
+    {
+      "name": "Panama",
+      "infections": 147667,
+      "location": "CA"
+    },
+    {
+      "name": "Canada",
+      "infections": 305750,
+      "location": "NA"
+    },
+    {
+      "name": "Mexico",
+      "infections": 1009396,
+      "location": "NA"
+    },
+    {
+      "name": "USA",
+      "infections": 11693048,
+      "location": "NA"
+    }
+  ],
+  "edges": [
+    {
+      "source": "Chile",
+      "target": "Argentina"
+    },
+    {
+      "source": "Chile",
+      "target": "Bolivia"
+    },
+    {
+      "source": "Chile",
+      "target": "Peru"
+    },
+    {
+      "source": "Argentina",
+      "target": "Bolivia"
+    },
+    {
+      "source": "Argentina",
+      "target": "Paraguay"
+    },
+    {
+      "source": "Argentina",
+      "target": "Brazil"
+    },
+    {
+      "source": "Argentina",
+      "target": "Uruguay"
+    },
+    {
+      "source": "Uruguay",
+      "target": "Brazil"
+    },
+    {
+      "source": "Paraguay",
+      "target": "Bolivia"
+    },
+    {
+      "source": "Paraguay",
+      "target": "Brazil"
+    },
+    {
+      "source": "Bolivia",
+      "target": "Peru"
+    },
+    {
+      "source": "Bolivia",
+      "target": "Brazil"
+    },
+    {
+      "source": "Peru",
+      "target": "Ecuador"
+    },
+    {
+      "source": "Peru",
+      "target": "Colombia"
+    },
+    {
+      "source": "Peru",
+      "target": "Brazil"
+    },
+    {
+      "source": "Ecuador",
+      "target": "Colombia"
+    },
+    {
+      "source": "Colombia",
+      "target": "Venezuela"
+    },
+    {
+      "source": "Colombia",
+      "target": "Brazil"
+    },
+    {
+      "source": "Venezuela",
+      "target": "Brazil"
+    },
+    {
+      "source": "USA",
+      "target": "Mexico"
+    },
+    {
+      "source": "USA",
+      "target": "Canada"
+    },
+    {
+      "source": "Mexico",
+      "target": "Belize"
+    },
+    {
+      "source": "Mexico",
+      "target": "Guatemala"
+    },
+    {
+      "source": "Guatemala",
+      "target": "Belize"
+    },
+    {
+      "source": "Guatemala",
+      "target": "Honduras"
+    },
+    {
+      "source": "Guatemala",
+      "target": "El Salvador"
+    },
+    {
+      "source": "El Salvador",
+      "target": "Honduras"
+    },
+    {
+      "source": "Honduras",
+      "target": "Nicaragua"
+    },
+    {
+      "source": "Nicaragua",
+      "target": "Costa Rica"
+    },
+    {
+      "source": "Costa Rica",
+      "target": "Panama"
+    },
+    {
+      "source": "Panama",
+      "target": "Colombia"
+    }
+  ]
+}

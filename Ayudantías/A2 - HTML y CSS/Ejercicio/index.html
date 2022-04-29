@@ -1,0 +1,85 @@
+<!doctype html>
+<title>Example</title>
+<style>
+    #outer-grid {
+        display: grid;
+        grid-template-rows: .6fr .8fr;
+        grid-template-columns: 2.5fr 1fr;
+        grid-gap: 10px;
+    }
+    
+    #outer-grid>div {
+        background-color: teal;
+        color: white;
+        font-size: 4vw;
+        padding: 10px;
+    }
+    
+    .inner-grid {
+        display: grid;
+        grid-template-rows: .1fr .1fr;
+        grid-template-columns: 1fr;
+    }
+    
+    .images {
+        display: flex;
+        justify-content: space-evenly;
+        /* max-height: 10vh; */
+    }
+    
+    .images>img {
+        align-self: center;
+        max-width: 20vw;
+    }
+    
+    .title {
+        margin: .2em;
+    }
+    
+    #ads {
+        grid-area: 1 / 2 / 3 / 2;
+    }
+    
+    h1 {
+        font-size: 6vw;
+    }
+    
+    #ads {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #ads img {
+        max-width: 100%;
+    }
+</style>
+<h1>The Best Gallery in the World</h1>
+<div id="outer-grid">
+
+    <div class="inner-grid" id="doges-cell">
+        <h3 class="title">Doges</h3>
+        <div id="doges-imgs" class="images">
+            <img src="doge1.jpg">
+            <img src="doge2.png">
+            <img src="doge3.jpg">
+        </div>
+    </div>
+    <div class="inner-grid">
+        <h3 class="title">Plants</h3>
+        <div class="images">
+            <img src="plant1.jpg">
+            <img src="plant2.jpg">
+            <img src="plant3.jpg">
+        </div>
+    </div>
+    <div id="ads">
+        <h3 class="title">Ads</h3>
+        <div class="vimages">
+            <img src="ad1.jpg">
+            <img src="ad2.jpg">
+            <img src="ad3.jpg">
+        </div>
+    </div>
+
+
+</div>

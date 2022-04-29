@@ -1,0 +1,27 @@
+* {
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+}
+
+html {
+  background-color: snow;
+}
+
+svg {
+  border: 2px solid #69359c;
+  background-color: white;
+}
+
+h1 {
+  margin-bottom: 4px;
+}
+
+.sub-title {
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 0;
+}
+
+.sub-title > p {
+  margin-top: 0;
+}
